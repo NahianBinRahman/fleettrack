@@ -1,0 +1,140 @@
+// Prisma schema for FleetTrack Budget Management System
+// Safe monetary storage using integer minor units (Paisa: 1 BDT = 100 Paisa)
+// Relational database model supporting both SQLite (local file) and PostgreSQL
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String            @id @default(cuid())
+  email        String            @unique
+  name         String
+  passwordHash String
+  role         String            @default("PERSONNEL") // ADMIN | PERSONNEL
+  serviceId    String            @unique // e.g. "NAV-8842"
+  rank         String?           // e.g. "Commander", "Lieutenant"
+  unit         String?           // e.g. "Naval Logistics Wing"
+  isActive     Boolean           @default(true)
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  allocations  BudgetAllocation[]
+  expenses     Expense[]
+  auditLogs    AuditLog[]
+
+  @@index([role])
+  @@index([serviceId])
+}
+
+model FinancialYear {
+  id          String             @id @default(cuid())
+  year        Int                @unique // 2026
+  label       String             // "FY 2025-2026" or "2026"
+  totalBudget BigInt             // in Paisa (integer minor unit)
+  status      String             @default("ACTIVE") // ACTIVE | CLOSED | DRAFT
+  startDate   DateTime
+  endDate     DateTime
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+
+  allocations BudgetAllocation[]
+  expenses    Expense[]
+
+  @@index([status])
+}
+
+model BudgetAllocation {
+  id              String                    @id @default(cuid())
+  userId          String
+  financialYearId String
+  allocatedAmount BigInt                    // in Paisa (1 BDT = 100 Paisa)
+  notes           String?
+  createdAt       DateTime                  @default(now())
+  updatedAt       DateTime                  @updatedAt
+
+  user            User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  financialYear   FinancialYear             @relation(fields: [financialYearId], references: [id], onDelete: Cascade)
+  history         BudgetAllocationHistory[]
+
+  @@unique([userId, financialYearId])
+  @@index([userId])
+  @@index([financialYearId])
+}
+
+model BudgetAllocationHistory {
+  id             String           @id @default(cuid())
+  allocationId   String
+  changedById    String
+  previousAmount BigInt
+  newAmount      BigInt
+  reason         String?
+  createdAt      DateTime         @default(now())
+
+  allocation     BudgetAllocation @relation(fields: [allocationId], references: [id], onDelete: Cascade)
+
+  @@index([allocationId])
+}
+
+model ExpenseCategory {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  description String?
+  icon        String?   @default("Receipt")
+  isDefault   Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+
+  expenses    Expense[]
+}
+
+model Expense {
+  id              String          @id @default(cuid())
+  userId          String
+  financialYearId String
+  categoryId      String
+  title           String
+  description     String?
+  amount          BigInt          // in Paisa (integer minor unit)
+  referenceNumber String          @unique // e.g. "EXP-2026-0041"
+  date            DateTime        @default(now())
+  status          String          @default("PENDING") // PENDING | PROCESSING | APPROVED | REJECTED | CANCELLED
+  notes           String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  financialYear   FinancialYear   @relation(fields: [financialYearId], references: [id], onDelete: Cascade)
+  category        ExpenseCategory @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+
+  @@index([userId])
+  @@index([financialYearId])
+  @@index([categoryId])
+  @@index([status])
+  @@index([date])
+}
+
+model AuditLog {
+  id            String   @id @default(cuid())
+  actorId       String?
+  actorName     String
+  actorRole     String
+  action        String   // ALLOCATION_CHANGED, EXPENSE_CREATED, EXPENSE_UPDATED, EXPENSE_DELETED, EXPENSE_STATUS_CHANGED, USER_STATUS_CHANGED, USER_CREATED
+  entityType    String   // BudgetAllocation, Expense, User, FinancialYear
+  entityId      String
+  previousValue String?  // JSON string
+  newValue      String?  // JSON string
+  ipAddress     String?
+  createdAt     DateTime @default(now())
+
+  actor         User?    @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([actorId])
+  @@index([action])
+  @@index([entityType])
+  @@index([createdAt])
+}
