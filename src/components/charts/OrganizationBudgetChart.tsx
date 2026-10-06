@@ -16,50 +16,43 @@ import { formatBDT } from "@/lib/money";
 interface OrgBudgetChartProps {
   totalBudgetPaisa: bigint | number;
   allocatedPaisa: bigint | number;
-  spentPaisa: bigint | number;
-  pendingPaisa: bigint | number;
-  remainingPaisa: bigint | number;
+  reservePaisa?: bigint | number;
   height?: number;
 }
 
 export function OrganizationBudgetChart({
   totalBudgetPaisa,
   allocatedPaisa,
-  spentPaisa,
-  pendingPaisa,
-  remainingPaisa,
+  reservePaisa,
   height = 260,
 }: OrgBudgetChartProps) {
+  const totPaisa = typeof totalBudgetPaisa === "bigint" ? totalBudgetPaisa : BigInt(totalBudgetPaisa);
+  const allocPaisa = typeof allocatedPaisa === "bigint" ? allocatedPaisa : BigInt(allocatedPaisa);
+  const unallocatedPaisa = reservePaisa !== undefined 
+    ? (typeof reservePaisa === "bigint" ? reservePaisa : BigInt(reservePaisa))
+    : totPaisa - allocPaisa;
+
   const data = [
     {
-      name: "Org Total",
-      amountPaisa: totalBudgetPaisa,
-      value: Number(totalBudgetPaisa) / 100,
+      name: "Org Annual Ceiling",
+      amountPaisa: totPaisa,
+      value: Number(totPaisa) / 100,
       color: "#0b1f3a",
+      description: "Approved Annual Budget Ceiling",
     },
     {
-      name: "Allocated",
-      amountPaisa: allocatedPaisa,
-      value: Number(allocatedPaisa) / 100,
+      name: "Allocated to Personnel",
+      amountPaisa: allocPaisa,
+      value: Number(allocPaisa) / 100,
       color: "#1e4e85",
+      description: "Allocated across Commissioned Personnel",
     },
     {
-      name: "Spent",
-      amountPaisa: spentPaisa,
-      value: Number(spentPaisa) / 100,
-      color: "#10b981",
-    },
-    {
-      name: "Pending",
-      amountPaisa: pendingPaisa,
-      value: Number(pendingPaisa) / 100,
-      color: "#f59e0b",
-    },
-    {
-      name: "Remaining",
-      amountPaisa: remainingPaisa,
-      value: Number(remainingPaisa) / 100,
-      color: "#64748b",
+      name: "Unallocated Reserve",
+      amountPaisa: unallocatedPaisa,
+      value: Number(unallocatedPaisa) / 100,
+      color: "#d4af37",
+      description: "Retained Command Operational Reserve",
     },
   ];
 
@@ -67,9 +60,15 @@ export function OrganizationBudgetChart({
     if (active && payload && payload.length) {
       const p = payload[0].payload;
       return (
-        <div className="bg-slate-900 text-white p-3 rounded-xl shadow-xl border border-slate-700 text-xs">
-          <p className="font-semibold text-slate-300">{p.name}</p>
-          <p className="text-white font-bold text-sm mt-1">{formatBDT(p.amountPaisa)}</p>
+        <div className="bg-slate-900 text-white p-3.5 rounded-xl shadow-xl border border-slate-700 text-xs">
+          <div className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: p.color }} />
+            <p className="font-bold text-slate-200">{p.name}</p>
+          </div>
+          <p className="text-white font-mono font-bold text-base mt-1.5">
+            {formatBDT(p.amountPaisa)}
+          </p>
+          <p className="text-slate-400 text-[11px] mt-0.5">{p.description}</p>
         </div>
       );
     }
@@ -81,12 +80,12 @@ export function OrganizationBudgetChart({
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={data}
-          margin={{ top: 15, right: 10, left: -15, bottom: 0 }}
+          margin={{ top: 20, right: 10, left: -10, bottom: 0 }}
         >
           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
           <XAxis
             dataKey="name"
-            tick={{ fontSize: 11, fill: "#64748b" }}
+            tick={{ fontSize: 11, fill: "#64748b", fontWeight: 500 }}
             axisLine={{ stroke: "#cbd5e1" }}
             tickLine={false}
           />
@@ -101,7 +100,7 @@ export function OrganizationBudgetChart({
             }}
           />
           <Tooltip content={<CustomTooltip />} />
-          <Bar dataKey="value" radius={[6, 6, 0, 0]}>
+          <Bar dataKey="value" radius={[8, 8, 0, 0]} maxBarSize={60}>
             {data.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.color} />
             ))}

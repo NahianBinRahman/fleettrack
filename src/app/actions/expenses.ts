@@ -76,13 +76,16 @@ export async function createExpenseAction(data: {
     };
   }
 
-  // Enforce server-side financial rule
-  // If amount exceeds available, we allow submission with status "PENDING" but flag warning in notes
-  let status = "PENDING";
-  let notes = data.notes || "";
+  // Strictly enforce 100% budget limit rule: CANNOT EXCEED 100% BUDGET
   if (data.amountPaisa > availablePaisa) {
-    notes = `[FLAG: Exceeds remaining budget by ${formatBDT(data.amountPaisa - availablePaisa)}] ${notes}`;
+    return {
+      success: false,
+      error: `Strict Budget Ceiling Enforced: This voucher (${formatBDT(data.amountPaisa)}) exceeds your remaining available budget (${formatBDT(availablePaisa)}). In accordance with naval regulations, personnel expenditures cannot exceed 100% of authorized annual allocation.`,
+    };
   }
+
+  const status = "PENDING";
+  const notes = data.notes || "";
 
   const createdExpense = await db.expense.create({
     data: {

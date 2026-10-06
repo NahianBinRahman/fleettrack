@@ -106,6 +106,13 @@ export function ExpenseForm({
   const isExceedingBudget = enteredAmountPaisa > effectiveAvailablePaisa;
 
   const handleFormSubmit = async (formData: ExpenseFormData) => {
+    if (isExceedingBudget) {
+      setServerError(
+        `Submission Blocked: This voucher (${formatBDT(enteredAmountPaisa)}) exceeds your available annual budget (${formatBDT(effectiveAvailablePaisa)}). Personnel expenditures cannot exceed 100% of the authorized annual allocation.`
+      );
+      return;
+    }
+
     setServerError(null);
     setSuccessMessage(null);
     setIsSubmitting(true);
@@ -170,12 +177,15 @@ export function ExpenseForm({
 
         {/* Warning if input exceeds remaining */}
         {isExceedingBudget && enteredAmountBDT > 0 && (
-          <div className="mt-3 pt-3 border-t border-slate-800 flex items-start gap-2 text-rose-300 text-xs">
+          <div className="mt-3 pt-3 border-t border-slate-800 flex items-start gap-2.5 text-rose-300 text-xs p-2.5 rounded-xl bg-rose-950/60 border border-rose-500/40">
             <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
-            <p>
-              Warning: Entered amount ({formatBDT(enteredAmountPaisa)}) exceeds your available balance ({formatBDT(effectiveAvailablePaisa)}) by{" "}
-              <strong>{formatBDT(enteredAmountPaisa - effectiveAvailablePaisa)}</strong>. Submissions over the allocated ceiling may be flagged or rejected.
-            </p>
+            <div>
+              <p className="font-bold text-rose-200">Strict Budget Limit Enforced (100% Maximum)</p>
+              <p className="mt-0.5 leading-relaxed">
+                Entered voucher ({formatBDT(enteredAmountPaisa)}) exceeds your remaining available ceiling ({formatBDT(effectiveAvailablePaisa)}) by{" "}
+                <strong className="underline">{formatBDT(enteredAmountPaisa - effectiveAvailablePaisa)}</strong>. Expenditures cannot exceed 100% of allocation; submission is disabled.
+              </p>
+            </div>
           </div>
         )}
       </div>
@@ -324,11 +334,13 @@ export function ExpenseForm({
           <Button
             type="submit"
             variant="naval"
-            disabled={isSubmitting}
+            disabled={isSubmitting || (isExceedingBudget && enteredAmountBDT > 0)}
             className="min-w-32"
           >
             {isSubmitting
               ? "Submitting..."
+              : isExceedingBudget && enteredAmountBDT > 0
+              ? "Exceeds 100% Budget"
               : initialData
               ? "Save Changes"
               : "Record Expense"}

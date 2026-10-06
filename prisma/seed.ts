@@ -116,7 +116,7 @@ async function main() {
       rank: "Lieutenant Commander",
       unit: "Naval Logistics & Supply Depot",
       budget: 400000,
-      targetUtilization: 1.05, // 105% Over Budget
+      targetUtilization: 0.98, // 98% Near Maximum (Strict Ceiling)
     },
     {
       name: "Commander M. A. Karim, BN",
@@ -125,7 +125,7 @@ async function main() {
       rank: "Commander",
       unit: "Naval Technical Workshop & Dockyard",
       budget: 500000,
-      targetUtilization: 1.00, // 100% Exactly reached
+      targetUtilization: 0.92, // 92% Approaching Limit
     },
     {
       name: "Lieutenant Commander Hasan Mahmud, BN",
@@ -352,14 +352,18 @@ async function main() {
     const targetApprovedRatio = personData.targetUtilization > 0.9 ? 0.88 : 0.80;
     const targetApprovedBDT = targetCommittedBDT * targetApprovedRatio;
 
-    while (accumulatedBDT < targetCommittedBDT) {
+    while (accumulatedBDT < targetCommittedBDT && accumulatedBDT < personData.budget) {
       const template = sampleExpenseTemplates[templateIdx % sampleExpenseTemplates.length];
       templateIdx++;
 
-      let itemAmount = Math.max(5000, Math.round(personData.budget * template.costRatio));
-      if (accumulatedBDT + itemAmount > targetCommittedBDT + 4000) {
-        itemAmount = Math.max(3000, Math.round(targetCommittedBDT - accumulatedBDT));
+      let itemAmount = Math.max(3000, Math.round(personData.budget * template.costRatio));
+      if (accumulatedBDT + itemAmount > targetCommittedBDT) {
+        itemAmount = Math.max(1000, Math.round(targetCommittedBDT - accumulatedBDT));
       }
+      if (accumulatedBDT + itemAmount > personData.budget) {
+        itemAmount = Math.max(0, personData.budget - accumulatedBDT);
+      }
+      if (itemAmount <= 0) break;
 
       const isApproved = accumulatedBDT + itemAmount <= targetApprovedBDT;
       const status = isApproved

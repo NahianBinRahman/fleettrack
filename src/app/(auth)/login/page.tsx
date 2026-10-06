@@ -136,11 +136,11 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setDemoUser("sadia.rahman@fleettrack.mil.bd")}
-                  className="p-2 text-left rounded-lg bg-slate-950/80 border border-rose-500/30 hover:border-rose-400 transition-all group"
+                  className="p-2 text-left rounded-lg bg-slate-950/80 border border-orange-500/30 hover:border-orange-400 transition-all group"
                 >
-                  <div className="flex items-center gap-1.5 text-xs font-bold text-rose-300">
-                    <span className="w-2 h-2 rounded-full bg-rose-500" />
-                    Over Budget (105%)
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-orange-300">
+                    <span className="w-2 h-2 rounded-full bg-orange-500" />
+                    Ceiling Reached (98%)
                   </div>
                   <p className="text-[10px] text-slate-400 truncate">Lt Cdr Sadia Rahman</p>
                 </button>

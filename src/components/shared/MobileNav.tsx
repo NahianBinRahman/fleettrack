@@ -218,6 +218,130 @@ export function MobileNav({ user }: MobileNavProps) {
           </form>
         </div>
       </div>
+
+      {/* Premium Mobile Bottom Navigation Bar (Thumb-optimized) */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#091726]/95 backdrop-blur-md border-t border-[#152e4d]/80 px-2 py-1.5 shadow-[0_-4px_20px_rgba(0,0,0,0.3)]">
+        <div className="flex items-center justify-around max-w-md mx-auto">
+          {isAdmin && pathname.startsWith("/admin") ? (
+            <>
+              <Link
+                href="/admin"
+                className={cn(
+                  "flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all duration-200",
+                  pathname === "/admin"
+                    ? "text-[#d4af37]"
+                    : "text-slate-400 hover:text-slate-200"
+                )}
+              >
+                <LayoutDashboard className="w-5 h-5 mb-0.5" />
+                <span className="text-[10px] font-medium tracking-tight">HQ</span>
+              </Link>
+              <Link
+                href="/admin/personnel"
+                className={cn(
+                  "flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all duration-200",
+                  pathname.startsWith("/admin/personnel")
+                    ? "text-[#d4af37]"
+                    : "text-slate-400 hover:text-slate-200"
+                )}
+              >
+                <Users className="w-5 h-5 mb-0.5" />
+                <span className="text-[10px] font-medium tracking-tight">Personnel</span>
+              </Link>
+              <Link
+                href="/admin/expenses"
+                className={cn(
+                  "flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all duration-200",
+                  pathname.startsWith("/admin/expenses")
+                    ? "text-[#d4af37]"
+                    : "text-slate-400 hover:text-slate-200"
+                )}
+              >
+                <Receipt className="w-5 h-5 mb-0.5" />
+                <span className="text-[10px] font-medium tracking-tight">Expenses</span>
+              </Link>
+              <Link
+                href="/admin/reports"
+                className={cn(
+                  "flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all duration-200",
+                  pathname.startsWith("/admin/reports")
+                    ? "text-[#d4af37]"
+                    : "text-slate-400 hover:text-slate-200"
+                )}
+              >
+                <FileBarChart className="w-5 h-5 mb-0.5" />
+                <span className="text-[10px] font-medium tracking-tight">Reports</span>
+              </Link>
+              <button
+                type="button"
+                onClick={() => setIsOpen(true)}
+                className="flex flex-col items-center justify-center py-1 px-2 rounded-xl text-slate-400 hover:text-slate-200 transition-all duration-200"
+              >
+                <Menu className="w-5 h-5 mb-0.5" />
+                <span className="text-[10px] font-medium tracking-tight">More</span>
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
+                href="/dashboard"
+                className={cn(
+                  "flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all duration-200",
+                  pathname === "/dashboard"
+                    ? "text-[#d4af37]"
+                    : "text-slate-400 hover:text-slate-200"
+                )}
+              >
+                <LayoutDashboard className="w-5 h-5 mb-0.5" />
+                <span className="text-[10px] font-medium tracking-tight">Dashboard</span>
+              </Link>
+              <Link
+                href="/my-budget"
+                className={cn(
+                  "flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all duration-200",
+                  pathname.startsWith("/my-budget")
+                    ? "text-[#d4af37]"
+                    : "text-slate-400 hover:text-slate-200"
+                )}
+              >
+                <Wallet className="w-5 h-5 mb-0.5" />
+                <span className="text-[10px] font-medium tracking-tight">Budget</span>
+              </Link>
+              <Link
+                href="/expenses"
+                className="relative -top-2 flex flex-col items-center justify-center"
+              >
+                <div className="w-11 h-11 rounded-full bg-linear-to-tr from-[#0a2540] via-[#123e6b] to-[#d4af37] p-0.5 shadow-lg shadow-black/40 flex items-center justify-center active:scale-95 transition-transform">
+                  <div className="w-full h-full rounded-full bg-[#091726] flex items-center justify-center text-[#d4af37]">
+                    <Receipt className="w-5 h-5" />
+                  </div>
+                </div>
+                <span className="text-[9px] font-bold text-[#d4af37] tracking-tight mt-0.5">Voucher</span>
+              </Link>
+              <Link
+                href="/reports"
+                className={cn(
+                  "flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all duration-200",
+                  pathname.startsWith("/reports")
+                    ? "text-[#d4af37]"
+                    : "text-slate-400 hover:text-slate-200"
+                )}
+              >
+                <FileBarChart className="w-5 h-5 mb-0.5" />
+                <span className="text-[10px] font-medium tracking-tight">Reports</span>
+              </Link>
+              <button
+                type="button"
+                onClick={() => setIsOpen(true)}
+                className="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-slate-400 hover:text-slate-200 transition-all duration-200"
+              >
+                <Menu className="w-5 h-5 mb-0.5" />
+                <span className="text-[10px] font-medium tracking-tight">Menu</span>
+              </button>
+            </>
+          )}
+        </div>
+      </div>
     </>
   );
 }

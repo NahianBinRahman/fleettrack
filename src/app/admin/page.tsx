@@ -211,47 +211,60 @@ export default async function AdminOverviewPage({
         </div>
       </div>
 
-      {/* Top Level Organization KPIs */}
+      {/* Top Level Organization KPIs: Focused on Total Allocated to Personnel (No Org Spent) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <BudgetStatCard
           title="Organization Annual Budget"
           amountInPaisa={orgTotalBudgetPaisa}
           icon={<Building2 className="w-5 h-5" />}
           variant="primary"
-          subtitle={`Total Ceiling (FY ${activeYear.year})`}
+          subtitle={`Annual Ceiling (FY ${activeYear.year})`}
         />
         <BudgetStatCard
           title="Total Allocated to Personnel"
           amountInPaisa={totalAllocatedPaisa}
           icon={<Wallet className="w-5 h-5" />}
-          variant="neutral"
+          variant="remaining"
+          highlight={true}
           percentage={
             orgTotalBudgetPaisa > BigInt(0)
               ? Number((totalAllocatedPaisa * BigInt(1000)) / orgTotalBudgetPaisa) / 10
               : 0
           }
-          subtitle="Distributed to Officers"
+          subtitle="Distributed across Naval Units"
         />
         <BudgetStatCard
-          title="Total Organization Spent"
-          amountInPaisa={totalSpentPaisa}
-          icon={<Receipt className="w-5 h-5" />}
-          variant="spent"
+          title="Unallocated Command Reserve"
+          amountInPaisa={orgTotalBudgetPaisa - totalAllocatedPaisa}
+          icon={<Clock className="w-5 h-5" />}
+          variant="pending"
           percentage={
             orgTotalBudgetPaisa > BigInt(0)
-              ? Number((totalSpentPaisa * BigInt(1000)) / orgTotalBudgetPaisa) / 10
+              ? Number(((orgTotalBudgetPaisa - totalAllocatedPaisa) * BigInt(1000)) / orgTotalBudgetPaisa) / 10
               : 0
           }
-          subtitle="Approved Expenditures"
+          subtitle="Available for New Allocations"
         />
-        <BudgetStatCard
-          title="Total Org Remaining"
-          amountInPaisa={orgRemainingPaisa}
-          icon={<Clock className="w-5 h-5" />}
-          variant="remaining"
-          highlight={true}
-          subtitle="Uncommitted Institutional Funds"
-        />
+        <div className="p-5 rounded-xl border border-slate-200 bg-white shadow-xs flex flex-col justify-between">
+          <div className="flex items-start justify-between">
+            <div>
+              <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                Commissioned Personnel
+              </span>
+              <p className="text-2xl font-black text-slate-900 mt-1">
+                {activePersonnelCount}{" "}
+                <span className="text-xs font-normal text-slate-500">/ 100+ Authorized</span>
+              </p>
+            </div>
+            <div className="p-2.5 rounded-xl bg-blue-50 text-[#0d2847]">
+              <Users className="w-5 h-5" />
+            </div>
+          </div>
+          <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+            <span>Enrolled with active quota</span>
+            <span className="font-semibold text-emerald-600">100% Active</span>
+          </div>
+        </div>
       </div>
 
       {/* Warning/Status Callout Row: Personnel Limit Metrics */}
@@ -309,16 +322,14 @@ export default async function AdminOverviewPage({
               Organization Budget Utilization
             </CardTitle>
             <CardDescription>
-              Annual ceiling vs allocated vs actual spend vs pending vouchers
+              Annual organization ceiling vs total allocated to commissioned personnel
             </CardDescription>
           </CardHeader>
           <CardContent className="pt-2">
             <OrganizationBudgetChart
               totalBudgetPaisa={orgTotalBudgetPaisa}
               allocatedPaisa={totalAllocatedPaisa}
-              spentPaisa={totalSpentPaisa}
-              pendingPaisa={totalPendingPaisa}
-              remainingPaisa={orgRemainingPaisa}
+              reservePaisa={orgTotalBudgetPaisa - totalAllocatedPaisa}
               height={260}
             />
           </CardContent>

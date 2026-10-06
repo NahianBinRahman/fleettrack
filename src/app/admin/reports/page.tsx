@@ -180,20 +180,27 @@ export default async function AdminReportsPage({
 
           <div>
             <span className="text-[10px] font-bold uppercase text-slate-500">
-              Total Org Spent
+              Unallocated Command Reserve
             </span>
-            <p className="text-lg font-bold font-mono text-slate-900 mt-1">
-              {formatBDT(totalSpentPaisa)}
+            <p className="text-lg font-bold font-mono text-amber-700 mt-1">
+              {formatBDT(activeYear.totalBudget - totalAllocatedPaisa)}
             </p>
+            <span className="text-[10px] text-slate-400">
+              {((Number(activeYear.totalBudget - totalAllocatedPaisa) / Number(activeYear.totalBudget)) * 100).toFixed(1)}% reserve
+            </span>
           </div>
 
           <div>
             <span className="text-[10px] font-bold uppercase text-slate-500">
-              Org Uncommitted Funds
+              Allocated Officers Pool
             </span>
             <p className="text-lg font-bold font-mono text-emerald-700 mt-1">
-              {formatBDT(orgRemainingPaisa)}
+              {personnel.length}{" "}
+              <span className="text-xs font-normal text-slate-500">Commissioned</span>
             </p>
+            <span className="text-[10px] text-slate-400">
+              100% Active Naval Service
+            </span>
           </div>
         </div>
 
