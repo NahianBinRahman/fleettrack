@@ -42,21 +42,21 @@ export function MobileNav({ user }: MobileNavProps) {
   const isAdmin = user.role === "ADMIN";
 
   const personnelNavItems = [
-    { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-    { label: "My Budget", href: "/my-budget", icon: Wallet },
-    { label: "Expenses", href: "/expenses", icon: Receipt },
-    { label: "Reports", href: "/reports", icon: FileBarChart },
-    { label: "Profile", href: "/profile", icon: User },
+    { label: "ড্যাশবোর্ড", href: "/dashboard", icon: LayoutDashboard },
+    { label: "আমার বাজেট", href: "/my-budget", icon: Wallet },
+    { label: "খরচের ভাউচার", href: "/expenses", icon: Receipt },
+    { label: "প্রতিবেদন", href: "/reports", icon: FileBarChart },
+    { label: "প্রোফাইল", href: "/profile", icon: User },
   ];
 
   const adminNavItems = [
-    { label: "Overview", href: "/admin", icon: LayoutDashboard },
-    { label: "Personnel", href: "/admin/personnel", icon: Users },
-    { label: "All Expenses", href: "/admin/expenses", icon: Receipt },
-    { label: "Financial Years", href: "/admin/financial-years", icon: Calendar },
-    { label: "Reports", href: "/admin/reports", icon: FileBarChart },
-    { label: "Audit Log", href: "/admin/audit-log", icon: History },
-    { label: "Settings", href: "/admin/settings", icon: Settings },
+    { label: "ওভারভিউ", href: "/admin", icon: LayoutDashboard },
+    { label: "অফিসার ও সদস্যবৃন্দ", href: "/admin/personnel", icon: Users },
+    { label: "সকল খরচের ভাউচার", href: "/admin/expenses", icon: Receipt },
+    { label: "অর্থবছর ব্যবস্থাপনা", href: "/admin/financial-years", icon: Calendar },
+    { label: "প্রতিবেদন ও রিপোর্ট", href: "/admin/reports", icon: FileBarChart },
+    { label: "অডিট ট্রেইল ও লগ", href: "/admin/audit-log", icon: History },
+    { label: "সেটিংস", href: "/admin/settings", icon: Settings },
   ];
 
   const currentNavItems = isAdmin && pathname.startsWith("/admin") ? adminNavItems : personnelNavItems;
@@ -90,7 +90,7 @@ export function MobileNav({ user }: MobileNavProps) {
               href={pathname.startsWith("/admin") ? "/dashboard" : "/admin"}
               className="text-[11px] font-semibold px-2 py-1 rounded bg-[#163860] text-blue-200 border border-blue-400/30"
             >
-              {pathname.startsWith("/admin") ? "Officer View" : "Admin"}
+              {pathname.startsWith("/admin") ? "অফিসার ভিউ" : "HQ অ্যাডমিন"}
             </Link>
           )}
           <div className="w-7 h-7 rounded-full bg-[#1b3d66] border border-[#d4af37]/30 flex items-center justify-center text-[10px] font-bold text-[#d4af37]">
@@ -123,7 +123,7 @@ export function MobileNav({ user }: MobileNavProps) {
               <span className="font-extrabold text-sm text-white">
                 FLEET<span className="text-[#d4af37]">TRACK</span>
               </span>
-              <p className="text-[10px] text-slate-400">Naval Budget System</p>
+              <p className="text-[10px] text-slate-400">নেভাল বাজেট প্রশাসন</p>
             </div>
           </div>
           <button
@@ -140,7 +140,7 @@ export function MobileNav({ user }: MobileNavProps) {
           <div className="p-3 mx-3 my-2 rounded-xl bg-[#0e243d] border border-[#1b3d66]">
             <div className="flex items-center gap-1.5 text-[11px] text-[#d4af37] font-semibold mb-2">
               <ShieldCheck className="w-3.5 h-3.5" />
-              Administrative Command
+              প্রশাসনিক কমান্ড
             </div>
             <div className="grid grid-cols-2 gap-1 text-xs">
               <Link
@@ -153,7 +153,7 @@ export function MobileNav({ user }: MobileNavProps) {
                     : "text-slate-400 hover:text-white"
                 )}
               >
-                HQ Admin
+                HQ অ্যাডমিন
               </Link>
               <Link
                 href="/dashboard"
@@ -165,7 +165,7 @@ export function MobileNav({ user }: MobileNavProps) {
                     : "text-slate-400 hover:text-white"
                 )}
               >
-                Officer
+                অফিসার ভিউ
               </Link>
             </div>
           </div>
@@ -213,7 +213,7 @@ export function MobileNav({ user }: MobileNavProps) {
               className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-medium text-slate-400 hover:text-rose-300 hover:bg-rose-950/20 transition-all cursor-pointer"
             >
               <LogOut className="w-3.5 h-3.5" />
-              Sign Out
+              লগআউট / প্রস্থান
             </button>
           </form>
         </div>
@@ -234,7 +234,7 @@ export function MobileNav({ user }: MobileNavProps) {
                 )}
               >
                 <LayoutDashboard className="w-5 h-5 mb-0.5" />
-                <span className="text-[10px] font-medium tracking-tight">HQ</span>
+                <span className="text-[10px] font-medium tracking-tight">ওভারভিউ</span>
               </Link>
               <Link
                 href="/admin/personnel"
@@ -246,7 +246,7 @@ export function MobileNav({ user }: MobileNavProps) {
                 )}
               >
                 <Users className="w-5 h-5 mb-0.5" />
-                <span className="text-[10px] font-medium tracking-tight">Personnel</span>
+                <span className="text-[10px] font-medium tracking-tight">অফিসার</span>
               </Link>
               <Link
                 href="/admin/expenses"
@@ -258,7 +258,7 @@ export function MobileNav({ user }: MobileNavProps) {
                 )}
               >
                 <Receipt className="w-5 h-5 mb-0.5" />
-                <span className="text-[10px] font-medium tracking-tight">Expenses</span>
+                <span className="text-[10px] font-medium tracking-tight">ভাউচার</span>
               </Link>
               <Link
                 href="/admin/reports"
@@ -270,7 +270,7 @@ export function MobileNav({ user }: MobileNavProps) {
                 )}
               >
                 <FileBarChart className="w-5 h-5 mb-0.5" />
-                <span className="text-[10px] font-medium tracking-tight">Reports</span>
+                <span className="text-[10px] font-medium tracking-tight">রিপোর্ট</span>
               </Link>
               <button
                 type="button"
@@ -278,7 +278,7 @@ export function MobileNav({ user }: MobileNavProps) {
                 className="flex flex-col items-center justify-center py-1 px-2 rounded-xl text-slate-400 hover:text-slate-200 transition-all duration-200"
               >
                 <Menu className="w-5 h-5 mb-0.5" />
-                <span className="text-[10px] font-medium tracking-tight">More</span>
+                <span className="text-[10px] font-medium tracking-tight">মেনু</span>
               </button>
             </>
           ) : (
@@ -293,7 +293,7 @@ export function MobileNav({ user }: MobileNavProps) {
                 )}
               >
                 <LayoutDashboard className="w-5 h-5 mb-0.5" />
-                <span className="text-[10px] font-medium tracking-tight">Dashboard</span>
+                <span className="text-[10px] font-medium tracking-tight">ড্যাশবোর্ড</span>
               </Link>
               <Link
                 href="/my-budget"
@@ -305,7 +305,7 @@ export function MobileNav({ user }: MobileNavProps) {
                 )}
               >
                 <Wallet className="w-5 h-5 mb-0.5" />
-                <span className="text-[10px] font-medium tracking-tight">Budget</span>
+                <span className="text-[10px] font-medium tracking-tight">বাজেট</span>
               </Link>
               <Link
                 href="/expenses"
@@ -316,7 +316,7 @@ export function MobileNav({ user }: MobileNavProps) {
                     <Receipt className="w-5 h-5" />
                   </div>
                 </div>
-                <span className="text-[9px] font-bold text-[#d4af37] tracking-tight mt-0.5">Voucher</span>
+                <span className="text-[9px] font-bold text-[#d4af37] tracking-tight mt-0.5">ভাউচার</span>
               </Link>
               <Link
                 href="/reports"
@@ -328,7 +328,7 @@ export function MobileNav({ user }: MobileNavProps) {
                 )}
               >
                 <FileBarChart className="w-5 h-5 mb-0.5" />
-                <span className="text-[10px] font-medium tracking-tight">Reports</span>
+                <span className="text-[10px] font-medium tracking-tight">রিপোর্ট</span>
               </Link>
               <button
                 type="button"
@@ -336,7 +336,7 @@ export function MobileNav({ user }: MobileNavProps) {
                 className="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-slate-400 hover:text-slate-200 transition-all duration-200"
               >
                 <Menu className="w-5 h-5 mb-0.5" />
-                <span className="text-[10px] font-medium tracking-tight">Menu</span>
+                <span className="text-[10px] font-medium tracking-tight">মেনু</span>
               </button>
             </>
           )}

@@ -40,21 +40,21 @@ export function Sidebar({ user }: SidebarProps) {
   const isAdmin = user.role === "ADMIN";
 
   const personnelNavItems = [
-    { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-    { label: "My Budget", href: "/my-budget", icon: Wallet },
-    { label: "Expenses", href: "/expenses", icon: Receipt },
-    { label: "Reports", href: "/reports", icon: FileBarChart },
-    { label: "Profile", href: "/profile", icon: User },
+    { label: "ড্যাশবোর্ড", href: "/dashboard", icon: LayoutDashboard },
+    { label: "আমার বাজেট", href: "/my-budget", icon: Wallet },
+    { label: "খরচের ভাউচার", href: "/expenses", icon: Receipt },
+    { label: "প্রতিবেদন", href: "/reports", icon: FileBarChart },
+    { label: "প্রোফাইল", href: "/profile", icon: User },
   ];
 
   const adminNavItems = [
-    { label: "Overview", href: "/admin", icon: LayoutDashboard },
-    { label: "Personnel", href: "/admin/personnel", icon: Users },
-    { label: "All Expenses", href: "/admin/expenses", icon: Receipt },
-    { label: "Financial Years", href: "/admin/financial-years", icon: Calendar },
-    { label: "Reports", href: "/admin/reports", icon: FileBarChart },
-    { label: "Audit Log", href: "/admin/audit-log", icon: History },
-    { label: "Settings", href: "/admin/settings", icon: Settings },
+    { label: "ওভারভিউ", href: "/admin", icon: LayoutDashboard },
+    { label: "অফিসার ও সদস্যবৃন্দ", href: "/admin/personnel", icon: Users },
+    { label: "সকল খরচের ভাউচার", href: "/admin/expenses", icon: Receipt },
+    { label: "অর্থবছর ব্যবস্থাপনা", href: "/admin/financial-years", icon: Calendar },
+    { label: "প্রতিবেদন ও রিপোর্ট", href: "/admin/reports", icon: FileBarChart },
+    { label: "অডিট ট্রেইল ও লগ", href: "/admin/audit-log", icon: History },
+    { label: "সেটিংস", href: "/admin/settings", icon: Settings },
   ];
 
   const currentNavItems = isAdmin && pathname.startsWith("/admin") ? adminNavItems : personnelNavItems;
@@ -76,7 +76,7 @@ export function Sidebar({ user }: SidebarProps) {
             </span>
           </div>
           <p className="text-[11px] text-slate-400 font-medium tracking-tight">
-            Naval Budget Admin
+            নেভাল বাজেট প্রশাসন
           </p>
         </div>
       </div>
@@ -88,10 +88,10 @@ export function Sidebar({ user }: SidebarProps) {
             <div className="flex items-center justify-between text-[11px] text-slate-300 px-1 font-semibold">
               <span className="flex items-center gap-1">
                 <ShieldCheck className="w-3.5 h-3.5 text-[#d4af37]" />
-                Command Mode
+                কমান্ড মোড
               </span>
               <span className="text-[10px] bg-blue-500/20 text-blue-300 px-1.5 py-0.5 rounded">
-                Admin
+                অ্যাডমিন
               </span>
             </div>
             <div className="grid grid-cols-2 gap-1 text-xs">
@@ -104,7 +104,7 @@ export function Sidebar({ user }: SidebarProps) {
                     : "text-slate-400 hover:text-slate-200 hover:bg-[#163860]/40"
                 )}
               >
-                HQ Admin
+                HQ অ্যাডমিন
               </Link>
               <Link
                 href="/dashboard"
@@ -115,7 +115,7 @@ export function Sidebar({ user }: SidebarProps) {
                     : "text-slate-400 hover:text-slate-200 hover:bg-[#163860]/40"
                 )}
               >
-                Officer View
+                অফিসার ভিউ
               </Link>
             </div>
           </div>
@@ -125,7 +125,7 @@ export function Sidebar({ user }: SidebarProps) {
       {/* Navigation Links */}
       <nav className="flex-1 px-4 py-5 space-y-1 overflow-y-auto">
         <div className="px-3 pb-2 text-[10px] font-bold uppercase tracking-wider text-slate-500">
-          {isAdmin && pathname.startsWith("/admin") ? "Headquarters Menu" : "Officer Portal"}
+          {isAdmin && pathname.startsWith("/admin") ? "হেডকোয়ার্টার্স মেনু" : "অফিসার পোর্টাল"}
         </div>
         {currentNavItems.map((item) => {
           const Icon = item.icon;
@@ -178,7 +178,7 @@ export function Sidebar({ user }: SidebarProps) {
             className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-medium text-slate-400 hover:text-rose-300 hover:bg-rose-950/20 border border-transparent hover:border-rose-900/30 transition-all cursor-pointer"
           >
             <LogOut className="w-3.5 h-3.5" />
-            Sign Out
+            লগআউট / প্রস্থান
           </button>
         </form>
       </div>

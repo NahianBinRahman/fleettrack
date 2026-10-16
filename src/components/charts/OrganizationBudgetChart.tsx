@@ -18,6 +18,7 @@ interface OrgBudgetChartProps {
   allocatedPaisa: bigint | number;
   reservePaisa?: bigint | number;
   height?: number;
+  bangla?: boolean;
 }
 
 export function OrganizationBudgetChart({
@@ -25,6 +26,7 @@ export function OrganizationBudgetChart({
   allocatedPaisa,
   reservePaisa,
   height = 260,
+  bangla = false,
 }: OrgBudgetChartProps) {
   const totPaisa = typeof totalBudgetPaisa === "bigint" ? totalBudgetPaisa : BigInt(totalBudgetPaisa);
   const allocPaisa = typeof allocatedPaisa === "bigint" ? allocatedPaisa : BigInt(allocatedPaisa);
@@ -34,25 +36,25 @@ export function OrganizationBudgetChart({
 
   const data = [
     {
-      name: "Org Annual Ceiling",
+      name: bangla ? "মোট বার্ষিক সিলিং" : "Org Annual Ceiling",
       amountPaisa: totPaisa,
       value: Number(totPaisa) / 100,
       color: "#0b1f3a",
-      description: "Approved Annual Budget Ceiling",
+      description: bangla ? "অনুমোদিত মোট বার্ষিক বাজেট সিলিং" : "Approved Annual Budget Ceiling",
     },
     {
-      name: "Allocated to Personnel",
+      name: bangla ? "অফিসারদের বরাদ্দ" : "Allocated to Personnel",
       amountPaisa: allocPaisa,
       value: Number(allocPaisa) / 100,
       color: "#1e4e85",
-      description: "Allocated across Commissioned Personnel",
+      description: bangla ? "কমিশন্ড অফিসারদের মধ্যে বণ্টিত" : "Allocated across Commissioned Personnel",
     },
     {
-      name: "Unallocated Reserve",
+      name: bangla ? "কমান্ড রিজার্ভ" : "Unallocated Reserve",
       amountPaisa: unallocatedPaisa,
       value: Number(unallocatedPaisa) / 100,
       color: "#d4af37",
-      description: "Retained Command Operational Reserve",
+      description: bangla ? "কমান্ডের সংরক্ষিত অতিরিক্ত তহবিল" : "Retained Command Operational Reserve",
     },
   ];
 

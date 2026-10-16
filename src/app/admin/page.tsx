@@ -28,6 +28,22 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 
+// বাংলা মাসের নাম
+const monthTranslation: Record<string, string> = {
+  Jul: "জুলাই",
+  Aug: "আগস্ট",
+  Sep: "সেপ্টেম্বর",
+  Oct: "অক্টোবর",
+  Nov: "নভেম্বর",
+  Dec: "ডিসেম্বর",
+  Jan: "জানুয়ারি",
+  Feb: "ফেব্রুয়ারি",
+  Mar: "মার্চ",
+  Apr: "এপ্রিল",
+  May: "মে",
+  Jun: "জুন",
+};
+
 export default async function AdminOverviewPage({
   searchParams,
 }: {
@@ -56,13 +72,13 @@ export default async function AdminOverviewPage({
   }
 
   if (!activeYear) {
-    return <div className="p-8">No financial year configured.</div>;
+    return <div className="p-8 text-center text-slate-500">কোনো অর্থবছর সক্রিয় নেই।</div>;
   }
 
-  // 1. Organization Total Budget
+  // ১. সংস্থার মোট বাজেট
   const orgTotalBudgetPaisa = activeYear.totalBudget;
 
-  // 2. Load all personnel with allocations for this financial year
+  // ২. চলতি অর্থবছরে বরাদ্দপ্রাপ্ত সকল অফিসার
   const personnelWithAllocations = await db.user.findMany({
     where: { role: "PERSONNEL" },
     include: {
@@ -78,7 +94,7 @@ export default async function AdminOverviewPage({
   const totalPersonnelCount = personnelWithAllocations.length;
   const activePersonnelCount = personnelWithAllocations.filter((p) => p.isActive).length;
 
-  // Calculate organization totals & individual metrics
+  // সংস্থার সামগ্রিক হিসাব
   let totalAllocatedPaisa = BigInt(0);
   let totalSpentPaisa = BigInt(0);
   let totalPendingPaisa = BigInt(0);
@@ -110,7 +126,7 @@ export default async function AdminOverviewPage({
   const totalCommittedPaisa = totalSpentPaisa + totalPendingPaisa;
   const orgRemainingPaisa = orgTotalBudgetPaisa - totalCommittedPaisa;
 
-  // Near limit & Over budget counts
+  // সীমার কাছাকাছি এবং অতিরিক্ত খরচকারী অফিসার
   const overBudgetPersonnel = personnelMetricsList.filter(
     (item) => item.metrics.committedPercentage > 100
   );
@@ -120,7 +136,7 @@ export default async function AdminOverviewPage({
       item.metrics.committedPercentage <= 100
   );
 
-  // Utilization distribution tiers
+  // ইউটিলাইজেশন টায়ার
   const tierCounts = {
     tier1: 0, // 0 - 50%
     tier2: 0, // 50 - 75%
@@ -139,27 +155,27 @@ export default async function AdminOverviewPage({
   });
 
   const distributionChartData = [
-    { range: "0–50%", count: tierCounts.tier1, label: "Healthy Low", color: "#10b981" },
-    { range: "50–75%", count: tierCounts.tier2, label: "Moderate", color: "#3b82f6" },
-    { range: "75–90%", count: tierCounts.tier3, label: "Approaching", color: "#f59e0b" },
-    { range: "90–100%", count: tierCounts.tier4, label: "Critical", color: "#f97316" },
-    { range: "100%+", count: tierCounts.tier5, label: "Exceeded Limit", color: "#ef4444" },
+    { range: "০–৫০%", count: tierCounts.tier1, label: "স্বাভাবিক ব্যয়", color: "#10b981" },
+    { range: "৫০–৭৫%", count: tierCounts.tier2, label: "মধ্যম", color: "#3b82f6" },
+    { range: "৭৫–৯০%", count: tierCounts.tier3, label: "সীমার কাছাকাছি", color: "#f59e0b" },
+    { range: "৯০–১০০%", count: tierCounts.tier4, label: "জরুরি সতর্কতা", color: "#f97316" },
+    { range: "১০০%+", count: tierCounts.tier5, label: "সীমা অতিক্রান্ত", color: "#ef4444" },
   ];
 
-  // Highest utilization list (top 6 closest to or exceeding limit)
+  // সর্বোচ্চ বাজেট ব্যবহারকারী শীর্ষ ৬ জন অফিসার
   const highestUtilizationList = [...personnelMetricsList]
     .sort((a, b) => b.metrics.committedPercentage - a.metrics.committedPercentage)
     .slice(0, 6);
 
-  // Organization-wide Monthly trend
+  // মাসভিত্তিক সামগ্রিক খরচ
   const orgExpenses = await db.expense.findMany({
     where: { financialYearId: activeYear.id },
     select: { date: true, amount: true, status: true },
   });
 
   const monthMap: Record<string, { amountPaisa: bigint; count: number }> = {};
-  const monthNames = ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun"];
-  monthNames.forEach((m) => {
+  const monthOrder = ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun"];
+  monthOrder.forEach((m) => {
     monthMap[m] = { amountPaisa: BigInt(0), count: 0 };
   });
 
@@ -173,25 +189,25 @@ export default async function AdminOverviewPage({
       }
     });
 
-  const monthlyOrgChartData = monthNames.map((m) => ({
-    month: m,
+  const monthlyOrgChartData = monthOrder.map((m) => ({
+    month: monthTranslation[m] || m,
     amountPaisa: monthMap[m].amountPaisa,
     count: monthMap[m].count,
   }));
 
   return (
-    <div className="space-y-6">
-      {/* Executive Welcome Banner */}
+    <div className="space-y-6 max-w-7xl mx-auto">
+      {/* ১. শীর্ষ কমান্ড ব্যানার (Executive Directorate Banner) */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2">
         <div>
           <span className="text-xs font-bold uppercase tracking-wider text-[#d4af37]">
-            Executive Directorate View &bull; {activeYear.label} ({activeYear.status})
+            হেডকোয়ার্টার্স কমান্ড ওভারভিউ &bull; {activeYear.label} ({activeYear.status === "ACTIVE" ? "চলতি অর্থবছর" : activeYear.status})
           </span>
           <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-0.5">
-            Naval Administrative Budget Overview
+            নেভাল বাজেট প্রশাসনিক ওভারভিউ
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Centrally monitoring ৳10,000,000 organization-wide allocation across {totalPersonnelCount} active officers
+            সার্বিকভাবে {formatBDT(orgTotalBudgetPaisa)} সংস্থা-ব্যাপী বরাদ্দ এবং {totalPersonnelCount} জন অফিসারের বাজেট তদারকি
           </p>
         </div>
 
@@ -199,29 +215,29 @@ export default async function AdminOverviewPage({
           <Link href="/admin/personnel">
             <Button variant="naval" size="default" className="shadow-sm">
               <Users className="w-4 h-4" />
-              Manage Personnel ({activePersonnelCount})
+              অফিসার ব্যবস্থাপনা ({activePersonnelCount})
             </Button>
           </Link>
           <Link href="/admin/reports">
             <Button variant="outline" size="default">
               <FileSpreadsheet className="w-4 h-4" />
-              HQ Reports
+              এইচকিউ রিপোর্ট
             </Button>
           </Link>
         </div>
       </div>
 
-      {/* Top Level Organization KPIs: Focused on Total Allocated to Personnel (No Org Spent) */}
+      {/* ২. সংস্থার মূল পরিসংখ্যান কার্ড (Organization KPIs) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <BudgetStatCard
-          title="Organization Annual Budget"
+          title="সংস্থার মোট বার্ষিক বাজেট"
           amountInPaisa={orgTotalBudgetPaisa}
           icon={<Building2 className="w-5 h-5" />}
           variant="primary"
-          subtitle={`Annual Ceiling (FY ${activeYear.year})`}
+          subtitle={`অনুমোদিত মোট সিলিং (${activeYear.label})`}
         />
         <BudgetStatCard
-          title="Total Allocated to Personnel"
+          title="অফিসারদের মোট বরাদ্দ"
           amountInPaisa={totalAllocatedPaisa}
           icon={<Wallet className="w-5 h-5" />}
           variant="remaining"
@@ -231,10 +247,10 @@ export default async function AdminOverviewPage({
               ? Number((totalAllocatedPaisa * BigInt(1000)) / orgTotalBudgetPaisa) / 10
               : 0
           }
-          subtitle="Distributed across Naval Units"
+          subtitle="বিভিন্ন ইউনিটের অনুকূলে প্রদত্ত"
         />
         <BudgetStatCard
-          title="Unallocated Command Reserve"
+          title="কমান্ড রিজার্ভ ফান্ড"
           amountInPaisa={orgTotalBudgetPaisa - totalAllocatedPaisa}
           icon={<Clock className="w-5 h-5" />}
           variant="pending"
@@ -243,17 +259,17 @@ export default async function AdminOverviewPage({
               ? Number(((orgTotalBudgetPaisa - totalAllocatedPaisa) * BigInt(1000)) / orgTotalBudgetPaisa) / 10
               : 0
           }
-          subtitle="Available for New Allocations"
+          subtitle="নতুন বরাদ্দের জন্য উপলব্ধ"
         />
         <div className="p-5 rounded-xl border border-slate-200 bg-white shadow-xs flex flex-col justify-between">
           <div className="flex items-start justify-between">
             <div>
               <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                Commissioned Personnel
+                কমিশন্ড অফিসারবৃন্দ
               </span>
               <p className="text-2xl font-black text-slate-900 mt-1">
                 {activePersonnelCount}{" "}
-                <span className="text-xs font-normal text-slate-500">/ 100+ Authorized</span>
+                <span className="text-xs font-normal text-slate-500">/ {totalPersonnelCount} জন অন্তর্ভুক্ত</span>
               </p>
             </div>
             <div className="p-2.5 rounded-xl bg-blue-50 text-[#0d2847]">
@@ -261,13 +277,13 @@ export default async function AdminOverviewPage({
             </div>
           </div>
           <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-            <span>Enrolled with active quota</span>
-            <span className="font-semibold text-emerald-600">100% Active</span>
+            <span>সক্রিয় কোটা বরাদ্দপ্রাপ্ত</span>
+            <span className="font-semibold text-emerald-600">১০০% সক্রিয়</span>
           </div>
         </div>
       </div>
 
-      {/* Warning/Status Callout Row: Personnel Limit Metrics */}
+      {/* ৩. সতর্কতা ও নজরদারি সারাংশ (Status Callout Cards) */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="p-4 bg-white rounded-2xl border border-slate-200/90 shadow-xs flex items-center gap-4">
           <div className="w-12 h-12 rounded-xl bg-blue-50 text-[#0d2847] flex items-center justify-center font-bold text-lg shrink-0">
@@ -275,10 +291,10 @@ export default async function AdminOverviewPage({
           </div>
           <div>
             <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
-              Active Officers
+              সক্রিয় অফিসারবৃন্দ
             </p>
             <p className="text-sm font-semibold text-slate-900 mt-0.5">
-              Enrolled with FY Allocations
+              অর্থবছরের কোটা সহ অন্তর্ভুক্ত
             </p>
           </div>
         </div>
@@ -289,10 +305,10 @@ export default async function AdminOverviewPage({
           </div>
           <div>
             <p className="text-xs font-bold uppercase tracking-wider text-amber-700">
-              Near Limit (80–100%)
+              সীমার কাছাকাছি (৮০–১০০%)
             </p>
             <p className="text-sm font-semibold text-slate-800 mt-0.5">
-              Require Budget Monitoring
+              নজরদারি প্রয়োজন
             </p>
           </div>
         </div>
@@ -303,94 +319,95 @@ export default async function AdminOverviewPage({
           </div>
           <div>
             <p className="text-xs font-bold uppercase tracking-wider text-rose-700">
-              Exceeded Limit (&gt;100%)
+              সীমা অতিক্রান্ত (&gt;১০০%)
             </p>
             <p className="text-sm font-semibold text-slate-800 mt-0.5">
-              Budget Deficit Flagged
+              বাজেট ঘাটতি চিহ্নিত
             </p>
           </div>
         </div>
       </div>
 
-      {/* Primary Visualizations: Org Utilization + Monthly Trend */}
+      {/* ৪. প্রাথমিক ভিজ্যুয়ালাইজেশন: সংস্থার ব্যবহার ও মাসিক গতিধারা */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Org Budget Comparison Bar Chart */}
+        {/* সংস্থার বাজেট বণ্টন বার চার্ট */}
         <Card className="border-slate-200/80 shadow-xs">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-base flex items-center gap-2">
+          <CardHeader className="pb-2 border-b border-slate-100">
+            <CardTitle className="text-base font-bold text-slate-900 flex items-center gap-2">
               <BarChart3 className="w-4 h-4 text-[#0d2847]" />
-              Organization Budget Utilization
+              সংস্থার বাজেট ইউটিলাইজেশন (Budget Utilization)
             </CardTitle>
-            <CardDescription>
-              Annual organization ceiling vs total allocated to commissioned personnel
+            <CardDescription className="text-xs text-slate-500 mt-0.5">
+              সংস্থার মোট বার্ষিক সিলিং বনাম অফিসারদের প্রদত্ত মোট বরাদ্দ
             </CardDescription>
           </CardHeader>
-          <CardContent className="pt-2">
+          <CardContent className="pt-3">
             <OrganizationBudgetChart
               totalBudgetPaisa={orgTotalBudgetPaisa}
               allocatedPaisa={totalAllocatedPaisa}
               reservePaisa={orgTotalBudgetPaisa - totalAllocatedPaisa}
               height={260}
+              bangla={true}
             />
           </CardContent>
         </Card>
 
-        {/* Organization Monthly Trend */}
+        {/* সংস্থার সামগ্রিক মাসিক গতিধারা */}
         <Card className="border-slate-200/80 shadow-xs">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-base flex items-center gap-2">
+          <CardHeader className="pb-2 border-b border-slate-100">
+            <CardTitle className="text-base font-bold text-slate-900 flex items-center gap-2">
               <TrendingUp className="w-4 h-4 text-[#0d2847]" />
-              Organization Monthly Expenditure Trajectory
+              সংস্থার মাসিক খরচের গতিধারা (Monthly Expenditure)
             </CardTitle>
-            <CardDescription>
-              Total disbursement velocity across all naval squadrons
+            <CardDescription className="text-xs text-slate-500 mt-0.5">
+              সকল নৌ স্কোয়াড্রন ও ইউনিটের সামগ্রিক মাসিক খরচের চিত্র
             </CardDescription>
           </CardHeader>
-          <CardContent className="pt-2">
-            <MonthlySpendingChart data={monthlyOrgChartData} height={260} />
+          <CardContent className="pt-3">
+            <MonthlySpendingChart data={monthlyOrgChartData} height={260} bangla={true} />
           </CardContent>
         </Card>
       </div>
 
-      {/* Secondary Row: Distribution Histogram + Highest Utilization Roster */}
+      {/* ৫. ডিস্ট্রিবিউশন হিস্টোগ্রাম ও সর্বোচ্চ ব্যবহারকারী অফিসার তালিকা */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Budget Utilization Distribution */}
+        {/* বাজেট ব্যবহারের বণ্টন */}
         <Card className="border-slate-200/80 shadow-xs">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-base flex items-center gap-2">
+          <CardHeader className="pb-2 border-b border-slate-100">
+            <CardTitle className="text-base font-bold text-slate-900 flex items-center gap-2">
               <BarChart3 className="w-4 h-4 text-[#0d2847]" />
-              Personnel Budget Utilization Distribution
+              অফিসারদের বাজেট ব্যবহারের অনুপাত (Distribution Tiers)
             </CardTitle>
-            <CardDescription>
-              Count of commissioned officers across utilization percentage tiers
+            <CardDescription className="text-xs text-slate-500 mt-0.5">
+              ব্যবহারের হার অনুযায়ী অফিসারের সংখ্যা
             </CardDescription>
           </CardHeader>
-          <CardContent className="pt-2">
-            <UtilizationDistributionChart data={distributionChartData} height={240} />
+          <CardContent className="pt-3">
+            <UtilizationDistributionChart data={distributionChartData} height={240} bangla={true} />
           </CardContent>
         </Card>
 
-        {/* Highest Budget Utilization List */}
+        {/* সর্বোচ্চ বাজেট ব্যবহারকারী অফিসারবৃন্দ */}
         <Card className="border-slate-200/80 shadow-xs flex flex-col justify-between">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
+          <CardHeader className="flex flex-row items-center justify-between pb-2 border-b border-slate-100">
             <div>
-              <CardTitle className="text-base flex items-center gap-2">
+              <CardTitle className="text-base font-bold text-slate-900 flex items-center gap-2">
                 <AlertTriangle className="w-4 h-4 text-amber-600" />
-                Highest Budget Utilization
+                সর্বোচ্চ বাজেট ব্যবহারকারী (Highest Utilization)
               </CardTitle>
-              <CardDescription>
-                Personnel closest to or exceeding assigned annual limits
+              <CardDescription className="text-xs text-slate-500 mt-0.5">
+                বরাদ্দকৃত সীমার কাছাকাছি বা অতিরিক্ত ব্যয়কারী অফিসারবৃন্দ
               </CardDescription>
             </div>
             <Link
               href="/admin/personnel"
-              className="text-xs font-semibold text-blue-900 hover:underline flex items-center gap-1"
+              className="text-xs font-bold text-[#0d2847] hover:underline flex items-center gap-1 px-2.5 py-1 rounded-lg hover:bg-slate-100 transition-colors"
             >
-              All Personnel
+              সকল অফিসার
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </CardHeader>
-          <CardContent className="divide-y divide-slate-100 flex-1">
+          <CardContent className="divide-y divide-slate-100 flex-1 pt-2">
             {highestUtilizationList.map((item) => (
               <div
                 key={item.user.id}
@@ -407,11 +424,12 @@ export default async function AdminOverviewPage({
                     <BudgetStatusBadge
                       status={item.metrics.statusLevel}
                       showIcon={false}
+                      bangla={true}
                       className="text-[10px] px-1.5 py-0"
                     />
                   </div>
                   <p className="text-[11px] text-slate-500 truncate mt-0.5">
-                    {item.user.serviceId} &bull; {item.user.unit || "Unit"}
+                    {item.user.serviceId} &bull; {item.user.unit || "ইউনিট"}
                   </p>
                 </div>
 

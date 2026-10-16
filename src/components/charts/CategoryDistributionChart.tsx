@@ -19,6 +19,7 @@ interface CategorySpendingData {
 interface CategoryDistributionChartProps {
   data: CategorySpendingData[];
   height?: number;
+  bangla?: boolean;
 }
 
 const CATEGORY_COLORS = [
@@ -36,6 +37,7 @@ const CATEGORY_COLORS = [
 export function CategoryDistributionChart({
   data,
   height = 260,
+  bangla = false,
 }: CategoryDistributionChartProps) {
   const totalAmountPaisa = data.reduce(
     (acc, cur) => acc + (typeof cur.amountPaisa === "bigint" ? cur.amountPaisa : BigInt(cur.amountPaisa)),
@@ -67,7 +69,7 @@ export function CategoryDistributionChart({
             {formatBDT(p.amountPaisa)}
           </p>
           <p className="text-slate-400 text-[11px]">
-            {p.percentage.toFixed(1)}% of category spending
+            {p.percentage.toFixed(1)}% {bangla ? "মোট ব্যয়ের অংশ" : "of category spending"}
           </p>
         </div>
       );
@@ -78,7 +80,7 @@ export function CategoryDistributionChart({
   if (chartData.length === 0) {
     return (
       <div className="flex items-center justify-center h-48 text-xs text-slate-400">
-        No expense category records for this period
+        {bangla ? "এই সময়ের জন্য কোনো ব্যয়ের রেকর্ড নেই" : "No expense category records for this period"}
       </div>
     );
   }

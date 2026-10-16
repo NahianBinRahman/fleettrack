@@ -11,6 +11,7 @@ interface BudgetProgressRingProps {
   size?: number;
   strokeWidth?: number;
   className?: string;
+  bangla?: boolean;
 }
 
 export function BudgetProgressRing({
@@ -18,6 +19,7 @@ export function BudgetProgressRing({
   size = 240,
   strokeWidth = 20,
   className,
+  bangla = false,
 }: BudgetProgressRingProps) {
   const center = size / 2;
   const radius = center - strokeWidth;
@@ -84,11 +86,11 @@ export function BudgetProgressRing({
             {metrics.committedPercentage.toFixed(0)}%
           </span>
           <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 mt-0.5">
-            Budget Used
+            {bangla ? "বাজেট ব্যবহৃত" : "Budget Used"}
           </span>
           <div className="mt-1 text-xs text-slate-600 font-medium">
             <span className="font-semibold text-slate-800">{formatBDT(metrics.committedPaisa)}</span>
-            {" "}of{" "}
+            {" "} {bangla ? "/" : "of"} {" "}
             <span className="text-slate-500">{formatBDT(metrics.allocatedPaisa)}</span>
           </div>
         </div>
@@ -99,7 +101,7 @@ export function BudgetProgressRing({
         <div className="flex flex-col items-center">
           <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
             <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: theme.ringColor }} />
-            Spent
+            {bangla ? "অনুমোদিত" : "Spent"}
           </div>
           <MoneyDisplay amountInPaisa={metrics.spentPaisa} size="sm" className="mt-1" />
           <span className="text-[10px] text-slate-400">{metrics.spentPercentage.toFixed(0)}%</span>
@@ -108,7 +110,7 @@ export function BudgetProgressRing({
         <div className="flex flex-col items-center">
           <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
             <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
-            Pending
+            {bangla ? "অপেক্ষমাণ" : "Pending"}
           </div>
           <MoneyDisplay amountInPaisa={metrics.pendingPaisa} size="sm" color="amber" className="mt-1" />
           <span className="text-[10px] text-slate-400">
@@ -119,7 +121,7 @@ export function BudgetProgressRing({
         <div className="flex flex-col items-center">
           <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
             <span className="w-2.5 h-2.5 rounded-full bg-slate-300" />
-            Remaining
+            {bangla ? "অবশিষ্ট" : "Remaining"}
           </div>
           <MoneyDisplay
             amountInPaisa={metrics.availablePaisa}
@@ -138,8 +140,12 @@ export function BudgetProgressRing({
         <BudgetStatusBadge status={metrics.statusLevel} />
         <p className="text-xs text-slate-500 text-center font-medium">
           {metrics.isOverBudget
-            ? `Warning: Exceeded allocated budget by ${formatBDT(-metrics.availablePaisa)}`
-            : `${formatBDT(metrics.availablePaisa)} remaining for official allocations`}
+            ? (bangla
+                ? `সতর্কতা: বরাদ্দের চেয়ে ${formatBDT(-metrics.availablePaisa)} অতিরিক্ত ব্যয়`
+                : `Warning: Exceeded allocated budget by ${formatBDT(-metrics.availablePaisa)}`)
+            : (bangla
+                ? `নতুন ব্যয়ের জন্য ${formatBDT(metrics.availablePaisa)} অবশিষ্ট আছে`
+                : `${formatBDT(metrics.availablePaisa)} remaining for official allocations`)}
         </p>
       </div>
     </div>

@@ -21,11 +21,13 @@ interface MonthlySpendingData {
 interface MonthlySpendingChartProps {
   data: MonthlySpendingData[];
   height?: number;
+  bangla?: boolean;
 }
 
 export function MonthlySpendingChart({
   data,
   height = 260,
+  bangla = false,
 }: MonthlySpendingChartProps) {
   const chartData = data.map((d) => ({
     month: d.month,
@@ -44,7 +46,7 @@ export function MonthlySpendingChart({
             {formatBDT(p.amountPaisa)}
           </p>
           <p className="text-slate-400 text-[11px] mt-0.5">
-            {p.count} expenditure {p.count === 1 ? "voucher" : "vouchers"}
+            {p.count} {bangla ? "টি ব্যয় ভাউচার" : `expenditure ${p.count === 1 ? "voucher" : "vouchers"}`}
           </p>
         </div>
       );

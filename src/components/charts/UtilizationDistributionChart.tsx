@@ -22,11 +22,13 @@ interface RangeCount {
 interface UtilizationDistributionChartProps {
   data: RangeCount[];
   height?: number;
+  bangla?: boolean;
 }
 
 export function UtilizationDistributionChart({
   data,
   height = 240,
+  bangla = false,
 }: UtilizationDistributionChartProps) {
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
@@ -35,7 +37,7 @@ export function UtilizationDistributionChart({
         <div className="bg-slate-900 text-white p-3 rounded-xl shadow-xl border border-slate-700 text-xs">
           <p className="font-semibold text-slate-300">{p.range}</p>
           <p className="text-white font-bold text-sm mt-1">
-            {p.count} {p.count === 1 ? "Officer" : "Personnel"}
+            {p.count} {bangla ? "জন অফিসার" : p.count === 1 ? "Officer" : "Personnel"}
           </p>
           <p className="text-slate-400 text-[11px] mt-0.5">{p.label}</p>
         </div>
