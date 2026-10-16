@@ -17,8 +17,8 @@ export default async function AdminAuditLogPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Administrative &amp; Financial Audit Trail"
-        description="Immutable system log tracking all budget adjustments, voucher lifecycles, and user authorization events."
+        title="প্রশাসনিক ও আর্থিক অডিট ট্রেইল (Audit Log)"
+        description="বাজেট সমন্বয়, ভাউচারের পরিবর্তন ও ব্যবহারকারীর কার্যকলাপের অপরিবর্তনীয় সিস্টেম রেকর্ড।"
       />
 
       <AuditLogViewer logs={logs} />

@@ -22,8 +22,8 @@ export function ConfirmDialog({
   onConfirm,
   title,
   description,
-  confirmText = "Confirm",
-  cancelText = "Cancel",
+  confirmText = "নিশ্চিত করুন",
+  cancelText = "বাতিল",
   variant = "danger",
   isLoading = false,
 }: ConfirmDialogProps) {
@@ -69,7 +69,7 @@ export function ConfirmDialog({
             onClick={onConfirm}
             disabled={isLoading}
           >
-            {isLoading ? "Processing..." : confirmText}
+            {isLoading ? "প্রক্রিয়াকরণ হচ্ছে..." : confirmText}
           </Button>
         </div>
       </div>

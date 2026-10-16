@@ -77,13 +77,13 @@ export function ExpensesClient({
   return (
     <div className="space-y-6">
       {/* Top Action Bar */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h2 className="text-lg font-bold text-slate-900">
-            Expenditure Ledger
+            ব্যয় লেজার ও ভাউচার তালিকা (Expense Ledger)
           </h2>
           <p className="text-xs text-slate-500">
-            Submit, track, and audit personal operational expense vouchers
+            অপারেশনাল খরচের ভাউচার দাখিল, তদারকি ও নিরীক্ষণ
           </p>
         </div>
 
@@ -93,7 +93,7 @@ export function ExpensesClient({
           className="shadow-sm"
         >
           <PlusCircle className="w-4 h-4" />
-          Add Expense Voucher
+          নতুন ভাউচার দাখিল
         </Button>
       </div>
 
@@ -114,10 +114,10 @@ export function ExpensesClient({
             <div className="p-5 bg-[#091726] text-white flex items-center justify-between shrink-0">
               <div>
                 <span className="text-[11px] font-bold uppercase tracking-wider text-[#d4af37]">
-                  Naval Voucher Submission
+                  নেভাল ভাউচার সাবমিশন
                 </span>
                 <h3 className="text-lg font-bold text-white">
-                  {editingExpense ? "Edit Expenditure Voucher" : "Record New Expense"}
+                  {editingExpense ? "খরচের ভাউচার সম্পাদনা" : "নতুন খরচের ভাউচার দাখিল"}
                 </h3>
               </div>
               <button

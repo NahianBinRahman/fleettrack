@@ -91,20 +91,20 @@ export function FinancialYearsClient({ years }: FinancialYearsClientProps) {
         return (
           <Badge variant="success" className="font-bold">
             <CheckCircle2 className="w-3 h-3" />
-            Active Financial Year
+            সক্রিয় অর্থবছর (Active FY)
           </Badge>
         );
       case "CLOSED":
         return (
           <Badge variant="secondary" className="font-semibold text-slate-500">
             <Archive className="w-3 h-3" />
-            Closed (Preserved Ledger)
+            সমাপ্ত (সংরক্ষিত লেজার)
           </Badge>
         );
       case "DRAFT":
         return (
           <Badge variant="outline" className="text-amber-600 border-amber-300">
-            Draft (Planning)
+            খসড়া (পরিকল্পনাধীন)
           </Badge>
         );
       default:
@@ -117,10 +117,10 @@ export function FinancialYearsClient({ years }: FinancialYearsClientProps) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-lg font-bold text-slate-900">
-            Financial Year Ledgers &amp; Statutory Preservation
+            অর্থবছর লেজার ও সংবিধিবদ্ধ সংরক্ষণ
           </h2>
           <p className="text-xs text-slate-500">
-            Each financial year retains independent, non-overwritable historical allocations and expenditure records
+            প্রতিটি অর্থবছর নিজস্ব স্বাধীন ও অপরিবর্তনীয় ঐতিহাসিক বরাদ্দ এবং ব্যয় রেকর্ড ধারণ করে
           </p>
         </div>
 
@@ -130,7 +130,7 @@ export function FinancialYearsClient({ years }: FinancialYearsClientProps) {
           className="shadow-sm"
         >
           <PlusCircle className="w-4 h-4" />
-          Create New Financial Year
+          নতুন অর্থবছর যোগ করুন
         </Button>
       </div>
 
@@ -163,7 +163,7 @@ export function FinancialYearsClient({ years }: FinancialYearsClientProps) {
             <CardContent className="space-y-4">
               <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200/80">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
-                  Annual Organization Budget
+                  বার্ষিক সামগ্রিক বাজেট (Total Budget)
                 </span>
                 <div className="mt-1">
                   <MoneyDisplay
@@ -176,13 +176,13 @@ export function FinancialYearsClient({ years }: FinancialYearsClientProps) {
 
               <div className="grid grid-cols-2 gap-2 text-xs text-slate-600">
                 <div className="p-2 rounded-lg bg-slate-50 border border-slate-100">
-                  <p className="text-[10px] text-slate-400">Allocated Officers</p>
+                  <p className="text-[10px] text-slate-400">বরাদ্দপ্রাপ্ত কর্মকর্তা</p>
                   <p className="font-bold text-slate-800 font-mono mt-0.5">
                     {fy._count?.allocations || 0}
                   </p>
                 </div>
                 <div className="p-2 rounded-lg bg-slate-50 border border-slate-100">
-                  <p className="text-[10px] text-slate-400">Recorded Vouchers</p>
+                  <p className="text-[10px] text-slate-400">সংরক্ষিত ভাউচার</p>
                   <p className="font-bold text-slate-800 font-mono mt-0.5">
                     {fy._count?.expenses || 0}
                   </p>
@@ -198,7 +198,7 @@ export function FinancialYearsClient({ years }: FinancialYearsClientProps) {
                     className="text-xs text-blue-900 border-blue-200 hover:bg-blue-50"
                     onClick={() => handleStatusChange(fy.id, "ACTIVE")}
                   >
-                    Set as Active FY
+                    সক্রিয় অর্থবছর করুন
                   </Button>
                 )}
                 {fy.status === "ACTIVE" && (
@@ -208,12 +208,12 @@ export function FinancialYearsClient({ years }: FinancialYearsClientProps) {
                     className="text-xs text-slate-600 hover:bg-slate-100"
                     onClick={() => handleStatusChange(fy.id, "CLOSED")}
                   >
-                    Close Financial Year
+                    অর্থবছর সমাপ্ত করুন
                   </Button>
                 )}
                 {fy.status === "DRAFT" && (
                   <span className="text-[11px] text-amber-600 font-medium italic">
-                    Planning draft
+                    পরিকল্পনাধীন খসড়া
                   </span>
                 )}
               </div>
@@ -229,10 +229,10 @@ export function FinancialYearsClient({ years }: FinancialYearsClientProps) {
             <div className="p-6 bg-[#091726] text-white flex items-center justify-between">
               <div>
                 <span className="text-[11px] font-bold uppercase tracking-wider text-[#d4af37]">
-                  Financial Accounting
+                  আর্থিক হিসাবরক্ষণ
                 </span>
                 <h3 className="text-lg font-bold text-white mt-0.5">
-                  Create New Financial Year
+                  নতুন অর্থবছর তৈরি করুন
                 </h3>
               </div>
               <button
@@ -254,7 +254,7 @@ export function FinancialYearsClient({ years }: FinancialYearsClientProps) {
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold uppercase tracking-wider text-slate-700">
-                    Fiscal Year *
+                    আর্থিক বছর *
                   </label>
                   <Input
                     type="number"
@@ -270,7 +270,7 @@ export function FinancialYearsClient({ years }: FinancialYearsClientProps) {
 
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold uppercase tracking-wider text-slate-700">
-                    Label *
+                    লেবেল / নাম *
                   </label>
                   <Input
                     value={label}
@@ -282,7 +282,7 @@ export function FinancialYearsClient({ years }: FinancialYearsClientProps) {
 
               <div className="space-y-1.5">
                 <label className="text-xs font-bold uppercase tracking-wider text-slate-700">
-                  Total Organization Budget (৳ BDT) *
+                  মোট সামগ্রিক বাজেট (৳ BDT) *
                 </label>
                 <div className="relative">
                   <span className="absolute left-3 top-2.5 text-slate-400 font-bold text-sm">
@@ -302,7 +302,7 @@ export function FinancialYearsClient({ years }: FinancialYearsClientProps) {
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold uppercase tracking-wider text-slate-700">
-                    Start Date
+                    শুরুর তারিখ
                   </label>
                   <Input
                     type="date"
@@ -314,7 +314,7 @@ export function FinancialYearsClient({ years }: FinancialYearsClientProps) {
 
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold uppercase tracking-wider text-slate-700">
-                    End Date
+                    সমাপ্তির তারিখ
                   </label>
                   <Input
                     type="date"
@@ -327,15 +327,15 @@ export function FinancialYearsClient({ years }: FinancialYearsClientProps) {
 
               <div className="space-y-1.5">
                 <label className="text-xs font-bold uppercase tracking-wider text-slate-700">
-                  Initial Status
+                  প্রাথমিক স্ট্যাটাস
                 </label>
                 <select
                   value={status}
                   onChange={(e) => setStatus(e.target.value)}
                   className="w-full h-10 px-3 py-2 bg-white rounded-lg border border-slate-300 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0d2847]"
                 >
-                  <option value="DRAFT">DRAFT (Under Planning)</option>
-                  <option value="ACTIVE">ACTIVE (Will close current active year)</option>
+                  <option value="DRAFT">DRAFT (খসড়া পরিকল্পনা)</option>
+                  <option value="ACTIVE">ACTIVE (বর্তমান সক্রিয় বছরটি ক্লোজ হবে)</option>
                 </select>
               </div>
 
@@ -346,14 +346,14 @@ export function FinancialYearsClient({ years }: FinancialYearsClientProps) {
                   onClick={() => setIsAddModalOpen(false)}
                   disabled={isSubmitting}
                 >
-                  Cancel
+                  বাতিল
                 </Button>
                 <Button
                   type="submit"
                   variant="naval"
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? "Creating..." : "Establish Financial Year"}
+                  {isSubmitting ? "তৈরি হচ্ছে..." : "অর্থবছর প্রতিষ্ঠা করুন"}
                 </Button>
               </div>
             </form>

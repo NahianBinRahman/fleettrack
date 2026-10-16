@@ -24,8 +24,8 @@ export default async function FinancialYearsPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Financial Year Administration"
-        description="Configure annual budget ceilings, statutory audit periods, and preserved financial cycles."
+        title="অর্থবছর ও বাজেট সাইকেল প্রশাসন (Financial Years)"
+        description="বার্ষিক সামগ্রিক বাজেট সিলিং, আইনগত অডিট সময়কাল এবং সংরক্ষিত আর্থিক সাইকেল পরিচালনা করুন।"
       />
 
       <FinancialYearsClient years={years} />

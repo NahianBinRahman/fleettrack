@@ -159,7 +159,7 @@ export function ExpenseTable({
           <div className="relative">
             <Input
               type="text"
-              placeholder="Search expenses, ref #, description..."
+              placeholder="ভাউচার, রেফারেন্স বা বিবরণ খুঁজুন..."
               value={searchQuery}
               onChange={(e) => {
                 setSearchQuery(e.target.value);
@@ -179,7 +179,7 @@ export function ExpenseTable({
               }}
               className="w-full h-10 px-3 py-2 bg-white rounded-lg border border-slate-300 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0d2847]"
             >
-              <option value="ALL">All Categories</option>
+              <option value="ALL">সকল খাত (All Categories)</option>
               {categories.map((c) => (
                 <option key={c.id} value={c.id}>
                   {c.name}
@@ -198,12 +198,12 @@ export function ExpenseTable({
               }}
               className="w-full h-10 px-3 py-2 bg-white rounded-lg border border-slate-300 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0d2847]"
             >
-              <option value="ALL">All Statuses</option>
-              <option value="APPROVED">Approved / Spent</option>
-              <option value="PENDING">Pending</option>
-              <option value="PROCESSING">Processing</option>
-              <option value="REJECTED">Rejected</option>
-              <option value="CANCELLED">Cancelled</option>
+              <option value="ALL">সকল অবস্থা (All Statuses)</option>
+              <option value="APPROVED">অনুমোদিত (Approved)</option>
+              <option value="PENDING">অপেক্ষমাণ (Pending)</option>
+              <option value="PROCESSING">প্রক্রিয়াধীন (Processing)</option>
+              <option value="REJECTED">প্রত্যাখ্যাত (Rejected)</option>
+              <option value="CANCELLED">বাতিলকৃত (Cancelled)</option>
             </select>
           </div>
 
@@ -217,17 +217,17 @@ export function ExpenseTable({
             >
               <ArrowUpDown className="w-3.5 h-3.5" />
               {sortField === "date"
-                ? `Date (${sortOrder})`
+                ? `তারিখ (${sortOrder === "asc" ? "পূর্ববর্তী" : "সাম্প্রতিক"})`
                 : sortField === "amount"
-                ? `Amount (${sortOrder})`
-                : "Sort"}
+                ? `টাকা (${sortOrder === "asc" ? "কম থেকে বেশি" : "বেশি থেকে কম"})`
+                : "বাছাই (Sort)"}
             </Button>
             {(searchQuery || selectedCategory !== "ALL" || selectedStatus !== "ALL") && (
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={handleResetFilters}
-                title="Reset filters"
+                title="ফিল্টার রিসেট করুন"
                 className="text-slate-500 hover:text-slate-900"
               >
                 <RotateCcw className="w-4 h-4" />
@@ -239,9 +239,9 @@ export function ExpenseTable({
         {/* Results Count */}
         <div className="flex items-center justify-between text-xs text-slate-500 pt-1 border-t border-slate-100">
           <span>
-            Showing <strong className="text-slate-700">{filteredExpenses.length}</strong> vouchers
+            মোট <strong className="text-slate-700">{filteredExpenses.length}</strong> টি ভাউচার প্রদর্শিত
           </span>
-          <span>Page {currentPage} of {totalPages}</span>
+          <span>পৃষ্ঠা {currentPage} / {totalPages}</span>
         </div>
       </div>
 
@@ -256,7 +256,7 @@ export function ExpenseTable({
                   onClick={() => handleSort("date")}
                 >
                   <div className="flex items-center gap-1.5">
-                    Date
+                    তারিখ
                     {sortField === "date" && (
                       <span className="text-blue-600 font-bold">
                         {sortOrder === "asc" ? "↑" : "↓"}
@@ -269,7 +269,7 @@ export function ExpenseTable({
                   onClick={() => handleSort("title")}
                 >
                   <div className="flex items-center gap-1.5">
-                    Expense Voucher
+                    ব্যয় ভাউচার
                     {sortField === "title" && (
                       <span className="text-blue-600 font-bold">
                         {sortOrder === "asc" ? "↑" : "↓"}
@@ -277,16 +277,16 @@ export function ExpenseTable({
                     )}
                   </div>
                 </th>
-                {showOfficerColumn && <th className="py-3.5 px-4">Officer / Unit</th>}
-                <th className="py-3.5 px-4">Category</th>
-                <th className="py-3.5 px-4">Ref Number</th>
-                <th className="py-3.5 px-4">Status</th>
+                {showOfficerColumn && <th className="py-3.5 px-4">অফিসার / ইউনিট</th>}
+                <th className="py-3.5 px-4">খাত</th>
+                <th className="py-3.5 px-4">রেফারেন্স</th>
+                <th className="py-3.5 px-4">অবস্থা</th>
                 <th
                   className="py-3.5 px-4 text-right cursor-pointer hover:text-slate-800"
                   onClick={() => handleSort("amount")}
                 >
                   <div className="flex items-center justify-end gap-1.5">
-                    Amount (BDT)
+                    টাকা (BDT)
                     {sortField === "amount" && (
                       <span className="text-blue-600 font-bold">
                         {sortOrder === "asc" ? "↑" : "↓"}
@@ -294,7 +294,7 @@ export function ExpenseTable({
                     )}
                   </div>
                 </th>
-                <th className="py-3.5 px-4 text-center">Actions</th>
+                <th className="py-3.5 px-4 text-center">কার্যক্রম</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -304,7 +304,7 @@ export function ExpenseTable({
                     colSpan={showOfficerColumn ? 8 : 7}
                     className="py-12 text-center text-slate-500 text-sm"
                   >
-                    No expense records matching the selected criteria.
+                    নির্বাচিত ফিল্টারের সাথে মিলে এমন কোনো খরচের ভাউচার পাওয়া যায়নি।
                   </td>
                 </tr>
               ) : (
@@ -451,7 +451,7 @@ export function ExpenseTable({
                     onClick={() => openDrawer(exp)}
                     className="h-8 px-2 text-xs"
                   >
-                    View
+                    দেখুন
                   </Button>
                   {canModify && onEditExpense && (
                     <Button
@@ -460,7 +460,7 @@ export function ExpenseTable({
                       onClick={() => onEditExpense(exp)}
                       className="h-8 px-2 text-xs text-amber-700"
                     >
-                      Edit
+                      সম্পাদনা
                     </Button>
                   )}
                 </div>
@@ -480,11 +480,11 @@ export function ExpenseTable({
             disabled={currentPage === 1}
           >
             <ChevronLeft className="w-4 h-4 mr-1" />
-            Previous
+            পূর্ববর্তী
           </Button>
 
           <span className="text-xs font-semibold text-slate-600">
-            Page {currentPage} of {totalPages}
+            পৃষ্ঠা {currentPage} / {totalPages}
           </span>
 
           <Button
@@ -493,7 +493,7 @@ export function ExpenseTable({
             onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
             disabled={currentPage === totalPages}
           >
-            Next
+            পরবর্তী
             <ChevronRight className="w-4 h-4 ml-1" />
           </Button>
         </div>
@@ -517,9 +517,9 @@ export function ExpenseTable({
         isOpen={!!deleteTarget}
         onClose={() => setDeleteTarget(null)}
         onConfirm={confirmDelete}
-        title="Delete Expense Voucher?"
-        description={`Are you sure you want to delete "${deleteTarget?.title}" (${deleteTarget?.referenceNumber})? This expenditure voucher will be permanently removed from the ledger and your available budget balance will be recalculated accordingly.`}
-        confirmText="Delete Voucher"
+        title="ভাউচার মুছে ফেলতে চান?"
+        description={`আপনি কি নিশ্চিতভাবে "${deleteTarget?.title}" (${deleteTarget?.referenceNumber}) ভাউচারটি স্থায়ীভাবে মুছে ফেলতে চান? এটি লেজার থেকে স্থায়ীভাবে অপসারিত হবে এবং আপনার বাজেট ব্যালেন্স স্বয়ংক্রিয়ভাবে সমন্বয় হবে।`}
+        confirmText="ভাউচার মুছুন"
         variant="danger"
         isLoading={isDeleting}
       />

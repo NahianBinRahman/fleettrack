@@ -126,7 +126,7 @@ export function PersonnelTable({
       <div className="p-4 bg-white rounded-2xl border border-slate-200/80 shadow-xs space-y-3">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           <Input
-            placeholder="Search officer name, service ID, unit..."
+            placeholder="কর্মকর্তার নাম, সার্ভিস আইডি, ইউনিট খুঁজুন..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             icon={<Search className="w-4 h-4 text-slate-400" />}
@@ -137,10 +137,10 @@ export function PersonnelTable({
             onChange={(e) => setUtilizationFilter(e.target.value)}
             className="w-full h-10 px-3 py-2 bg-white rounded-lg border border-slate-300 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0d2847]"
           >
-            <option value="ALL">All Utilization Tiers</option>
-            <option value="HEALTHY">Healthy (&lt; 80%)</option>
-            <option value="APPROACHING">Near Limit (80% – 100%)</option>
-            <option value="EXCEEDED">Exceeded Budget (&gt; 100%)</option>
+            <option value="ALL">সকল ব্যয়ের স্তর</option>
+            <option value="HEALTHY">স্বাভাবিক ব্যয় (&lt; ৮০%)</option>
+            <option value="APPROACHING">সীমার কাছাকাছি (৮০% – ১০০%)</option>
+            <option value="EXCEEDED">বাজেট অতিক্রম (&gt; ১০০%)</option>
           </select>
 
           <select
@@ -148,9 +148,9 @@ export function PersonnelTable({
             onChange={(e) => setStatusFilter(e.target.value)}
             className="w-full h-10 px-3 py-2 bg-white rounded-lg border border-slate-300 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0d2847]"
           >
-            <option value="ALL">All Accounts</option>
-            <option value="ACTIVE">Active Only</option>
-            <option value="INACTIVE">Deactivated</option>
+            <option value="ALL">সকল অ্যাকাউন্ট</option>
+            <option value="ACTIVE">শুধু সক্রিয়</option>
+            <option value="INACTIVE">নিষ্ক্রিয়</option>
           </select>
 
           <select
@@ -158,15 +158,15 @@ export function PersonnelTable({
             onChange={(e) => setSortBy(e.target.value as any)}
             className="w-full h-10 px-3 py-2 bg-white rounded-lg border border-slate-300 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0d2847]"
           >
-            <option value="utilization">Highest Utilization First</option>
-            <option value="allocated">Highest Allocation First</option>
-            <option value="name">Name (A–Z)</option>
+            <option value="utilization">সর্বোচ্চ ব্যয়কৃত আগে</option>
+            <option value="allocated">সর্বোচ্চ বরাদ্দ আগে</option>
+            <option value="name">নামানুসারে (A–Z)</option>
           </select>
         </div>
 
         <div className="flex items-center justify-between text-xs text-slate-500 pt-1 border-t border-slate-100">
           <span>
-            Found <strong className="text-slate-800">{sortedPersonnel.length}</strong> personnel members
+            মোট <strong className="text-slate-800">{sortedPersonnel.length}</strong> জন কর্মকর্তা পাওয়া গেছে
           </span>
           {(searchQuery || utilizationFilter !== "ALL" || statusFilter !== "ALL") && (
             <button
@@ -178,7 +178,7 @@ export function PersonnelTable({
               className="text-xs text-blue-700 hover:underline flex items-center gap-1 cursor-pointer"
             >
               <RotateCcw className="w-3 h-3" />
-              Reset Filters
+              ফিল্টার রিসেট
             </button>
           )}
         </div>
@@ -190,21 +190,21 @@ export function PersonnelTable({
           <table className="w-full text-left text-sm">
             <thead className="bg-slate-50/80 text-[11px] font-bold uppercase tracking-wider text-slate-500 border-b border-slate-200">
               <tr>
-                <th className="py-3.5 px-4">Officer / Service ID</th>
-                <th className="py-3.5 px-4">Designation & Unit</th>
-                <th className="py-3.5 px-4 text-right">Assigned (BDT)</th>
-                <th className="py-3.5 px-4 text-right">Spent</th>
-                <th className="py-3.5 px-4 text-right">Available</th>
-                <th className="py-3.5 px-4 w-44">Budget Utilization</th>
-                <th className="py-3.5 px-4 text-center">Status</th>
-                <th className="py-3.5 px-4 text-center">Actions</th>
+                <th className="py-3.5 px-4">কর্মকর্তা / সার্ভিস আইডি</th>
+                <th className="py-3.5 px-4">পদমর্যাদা ও ইউনিট</th>
+                <th className="py-3.5 px-4 text-right">বরাদ্দকৃত (BDT)</th>
+                <th className="py-3.5 px-4 text-right">ব্যয়কৃত</th>
+                <th className="py-3.5 px-4 text-right">অবশিষ্ট</th>
+                <th className="py-3.5 px-4 w-44">বাজেট ব্যবহার</th>
+                <th className="py-3.5 px-4 text-center">স্ট্যাটাস</th>
+                <th className="py-3.5 px-4 text-center">পদক্ষেপ</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {sortedPersonnel.length === 0 ? (
                 <tr>
                   <td colSpan={8} className="py-12 text-center text-slate-500 text-sm">
-                    No naval personnel found matching the criteria.
+                    কোনো কর্মকর্তার তথ্য পাওয়া যায়নি।
                   </td>
                 </tr>
               ) : (
@@ -235,7 +235,7 @@ export function PersonnelTable({
                       <MoneyDisplay amountInPaisa={p.spentPaisa} size="sm" />
                       {p.pendingPaisa > BigInt(0) && (
                         <p className="text-[10px] text-amber-600 font-mono">
-                          +{formatBDT(p.pendingPaisa)} pend.
+                          +{formatBDT(p.pendingPaisa)} প্রক্রিয়াধীন
                         </p>
                       )}
                     </td>
@@ -257,7 +257,7 @@ export function PersonnelTable({
                             : "bg-slate-100 text-slate-600 border border-slate-200"
                         }`}
                       >
-                        {p.isActive ? "Active" : "Inactive"}
+                        {p.isActive ? "সক্রিয়" : "নিষ্ক্রিয়"}
                       </span>
                     </td>
                     <td className="py-3.5 px-4 text-center">
@@ -265,14 +265,14 @@ export function PersonnelTable({
                         <Link
                           href={`/admin/personnel/${p.userId}`}
                           className="p-1.5 rounded-lg text-slate-500 hover:text-blue-900 hover:bg-blue-50 transition-colors"
-                          title="View Officer Details"
+                          title="বিস্তারিত দেখুন"
                         >
                           <Eye className="w-4 h-4" />
                         </Link>
                         <button
                           onClick={() => setAdjustTarget(p)}
                           className="p-1.5 rounded-lg text-slate-500 hover:text-amber-700 hover:bg-amber-50 transition-colors"
-                          title="Adjust Budget Allocation"
+                          title="বাজেট পরিবর্তন করুন"
                         >
                           <SlidersHorizontal className="w-4 h-4" />
                         </button>
@@ -283,7 +283,7 @@ export function PersonnelTable({
                               ? "text-slate-400 hover:text-rose-700 hover:bg-rose-50"
                               : "text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50"
                           }`}
-                          title={p.isActive ? "Deactivate Account" : "Activate Account"}
+                          title={p.isActive ? "অ্যাকাউন্ট নিষ্ক্রিয় করুন" : "অ্যাকাউন্ট সক্রিয় করুন"}
                         >
                           <Power className="w-4 h-4" />
                         </button>
@@ -325,25 +325,25 @@ export function PersonnelTable({
                     : "bg-slate-100 text-slate-600"
                 }`}
               >
-                {p.isActive ? "Active" : "Inactive"}
+                {p.isActive ? "সক্রিয়" : "নিষ্ক্রিয়"}
               </span>
             </div>
 
             <div className="grid grid-cols-3 gap-2 p-2.5 bg-slate-50 rounded-xl text-xs text-center">
               <div>
-                <span className="text-[10px] text-slate-400">Allocated</span>
+                <span className="text-[10px] text-slate-400">বরাদ্দকৃত</span>
                 <p className="font-bold text-slate-800 font-mono mt-0.5">
                   {formatBDT(p.allocatedPaisa)}
                 </p>
               </div>
               <div>
-                <span className="text-[10px] text-slate-400">Spent</span>
+                <span className="text-[10px] text-slate-400">ব্যয়কৃত</span>
                 <p className="font-bold text-slate-800 font-mono mt-0.5">
                   {formatBDT(p.spentPaisa)}
                 </p>
               </div>
               <div>
-                <span className="text-[10px] text-slate-400">Available</span>
+                <span className="text-[10px] text-slate-400">অবশিষ্ট</span>
                 <p
                   className={`font-bold font-mono mt-0.5 ${
                     p.metrics.isOverBudget ? "text-rose-600" : "text-emerald-700"
@@ -364,12 +364,12 @@ export function PersonnelTable({
                 onClick={() => setAdjustTarget(p)}
               >
                 <SlidersHorizontal className="w-3.5 h-3.5" />
-                Adjust Budget
+                বাজেট পরিবর্তন
               </Button>
               <Link href={`/admin/personnel/${p.userId}`} className="flex-1">
                 <Button variant="secondary" size="sm" className="w-full text-xs">
                   <Eye className="w-3.5 h-3.5" />
-                  View Ledger
+                  লেজার দেখুন
                 </Button>
               </Link>
             </div>
@@ -402,13 +402,13 @@ export function PersonnelTable({
         isOpen={!!toggleTarget}
         onClose={() => setToggleTarget(null)}
         onConfirm={handleConfirmToggle}
-        title={toggleTarget?.isActive ? "Deactivate Officer Account?" : "Activate Officer Account?"}
+        title={toggleTarget?.isActive ? "অ্যাকাউন্ট নিষ্ক্রিয় করবেন?" : "অ্যাকাউন্ট সক্রিয় করবেন?"}
         description={
           toggleTarget?.isActive
-            ? `Deactivating ${toggleTarget.name} (${toggleTarget.serviceId}) will immediately suspend their sign-in privileges and voucher submissions. Their historical budget and expense records will remain intact.`
-            : `Re-activating ${toggleTarget?.name} (${toggleTarget?.serviceId}) will restore their access to the FleetTrack portal.`
+            ? `${toggleTarget.name} (${toggleTarget.serviceId})-এর অ্যাকাউন্ট নিষ্ক্রিয় করলে তাঁর সাইন-ইন ও নতুন ভাউচার দাখিল স্থগিত হবে। পূর্ববর্তী সকল বাজেট ও ব্যয়ের তথ্য অপরিবর্তিত থাকবে।`
+            : `${toggleTarget?.name} (${toggleTarget?.serviceId})-এর অ্যাকাউন্ট পুনরায় সক্রিয় করলে তিনি FleetTrack পোর্টালে প্রবেশ করতে পারবেন।`
         }
-        confirmText={toggleTarget?.isActive ? "Deactivate Account" : "Activate Account"}
+        confirmText={toggleTarget?.isActive ? "নিষ্ক্রিয় করুন" : "সক্রিয় করুন"}
         variant={toggleTarget?.isActive ? "danger" : "primary"}
         isLoading={isToggling}
       />

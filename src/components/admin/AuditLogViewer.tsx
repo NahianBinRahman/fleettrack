@@ -69,19 +69,19 @@ export function AuditLogViewer({ logs }: AuditLogViewerProps) {
   const getActionBadge = (action: string) => {
     switch (action) {
       case "ALLOCATION_CHANGED":
-        return <Badge variant="warning">Allocation Changed</Badge>;
+        return <Badge variant="warning">বাজেট পরিবর্তন</Badge>;
       case "EXPENSE_CREATED":
-        return <Badge variant="info">Expense Created</Badge>;
+        return <Badge variant="info">নতুন ভাউচার তৈরি</Badge>;
       case "EXPENSE_UPDATED":
-        return <Badge variant="secondary">Expense Updated</Badge>;
+        return <Badge variant="secondary">ভাউচার সংশোধন</Badge>;
       case "EXPENSE_DELETED":
-        return <Badge variant="destructive">Expense Deleted</Badge>;
+        return <Badge variant="destructive">ভাউচার অপসারিত</Badge>;
       case "EXPENSE_STATUS_CHANGED":
-        return <Badge variant="success">Status Changed</Badge>;
+        return <Badge variant="success">স্ট্যাটাস পরিবর্তন</Badge>;
       case "USER_STATUS_CHANGED":
-        return <Badge variant="outline">User Status</Badge>;
+        return <Badge variant="outline">অ্যাকাউন্ট স্ট্যাটাস</Badge>;
       case "USER_CREATED":
-        return <Badge variant="info">User Enrolled</Badge>;
+        return <Badge variant="info">কর্মকর্তা নিবন্ধন</Badge>;
       default:
         return <Badge variant="outline">{action}</Badge>;
     }
@@ -93,7 +93,7 @@ export function AuditLogViewer({ logs }: AuditLogViewerProps) {
       <div className="p-4 bg-white rounded-2xl border border-slate-200/80 shadow-xs flex flex-col sm:flex-row gap-3 items-center justify-between">
         <div className="w-full sm:w-80">
           <Input
-            placeholder="Search audit trail, actor, entity ID..."
+            placeholder="অডিট ট্রেইল, ব্যবহারকারী বা এনটিটি খুঁজুন..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             icon={<Search className="w-4 h-4 text-slate-400" />}
@@ -106,14 +106,14 @@ export function AuditLogViewer({ logs }: AuditLogViewerProps) {
             onChange={(e) => setActionFilter(e.target.value)}
             className="w-full sm:w-60 h-10 px-3 py-2 bg-white rounded-lg border border-slate-300 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0d2847]"
           >
-            <option value="ALL">All Audit Actions</option>
-            <option value="ALLOCATION_CHANGED">Budget Allocation Changed</option>
-            <option value="EXPENSE_CREATED">Expense Created</option>
-            <option value="EXPENSE_UPDATED">Expense Updated</option>
-            <option value="EXPENSE_DELETED">Expense Deleted</option>
-            <option value="EXPENSE_STATUS_CHANGED">Expense Status Changed</option>
-            <option value="USER_STATUS_CHANGED">User Account Modified</option>
-            <option value="USER_CREATED">Personnel Account Enrolled</option>
+            <option value="ALL">সকল অডিট পদক্ষেপ</option>
+            <option value="ALLOCATION_CHANGED">বাজেট বরাদ্দ পরিবর্তন</option>
+            <option value="EXPENSE_CREATED">নতুন ভাউচার তৈরি</option>
+            <option value="EXPENSE_UPDATED">ভাউচার সংশোধন</option>
+            <option value="EXPENSE_DELETED">ভাউচার অপসারিত</option>
+            <option value="EXPENSE_STATUS_CHANGED">ভাউচার স্ট্যাটাস পরিবর্তন</option>
+            <option value="USER_STATUS_CHANGED">অ্যাকাউন্ট পরিবর্তন</option>
+            <option value="USER_CREATED">কর্মকর্তা নিবন্ধন</option>
           </select>
 
           {(searchQuery || actionFilter !== "ALL") && (
@@ -125,7 +125,7 @@ export function AuditLogViewer({ logs }: AuditLogViewerProps) {
               className="text-xs text-blue-700 hover:underline flex items-center gap-1 cursor-pointer shrink-0"
             >
               <RotateCcw className="w-3.5 h-3.5" />
-              Reset
+              রিসেট
             </button>
           )}
         </div>
@@ -135,7 +135,7 @@ export function AuditLogViewer({ logs }: AuditLogViewerProps) {
       <div className="space-y-3">
         {filteredLogs.length === 0 ? (
           <div className="p-12 text-center bg-white rounded-2xl border border-slate-200 text-slate-500 text-sm">
-            No audit log records match the search parameters.
+            কোনো অডিট রেকর্ড পাওয়া যায়নি।
           </div>
         ) : (
           filteredLogs.map((log) => (
@@ -158,7 +158,7 @@ export function AuditLogViewer({ logs }: AuditLogViewerProps) {
                       </span>
                     </div>
                     <span className="text-xs text-slate-500">
-                      Target Entity: <strong className="font-mono text-slate-700">{log.entityType} ({log.entityId})</strong>
+                      টার্গেট এনটিটি: <strong className="font-mono text-slate-700">{log.entityType} ({log.entityId})</strong>
                     </span>
                   </div>
                 </div>
@@ -178,7 +178,7 @@ export function AuditLogViewer({ logs }: AuditLogViewerProps) {
                   {log.previousValue && (
                     <div className="space-y-1">
                       <span className="text-[10px] font-bold uppercase text-slate-400">
-                        Previous Value / State
+                        পূর্ববর্তী মান / অবস্থা (Previous)
                       </span>
                       {formatJSONValue(log.previousValue)}
                     </div>
@@ -186,7 +186,7 @@ export function AuditLogViewer({ logs }: AuditLogViewerProps) {
                   {log.newValue && (
                     <div className="space-y-1">
                       <span className="text-[10px] font-bold uppercase text-blue-800">
-                        New Value / State
+                        নতুন মান / অবস্থা (New)
                       </span>
                       {formatJSONValue(log.newValue)}
                     </div>

@@ -48,19 +48,19 @@ export default function LoginPage() {
             FLEET<span className="text-[#d4af37]">TRACK</span>
           </h1>
           <p className="text-xs uppercase tracking-widest text-[#d4af37] font-bold">
-            Naval Administrative Budget System
+            নেভাল বাজেট ব্যবস্থাপনা পোর্টাল
           </p>
           <p className="text-xs text-slate-400">
-            Secure Annual Allocation &amp; Expenditure Portal (৳ BDT)
+            নিরাপদ বার্ষিক বাজেট ও ব্যয় ট্র্যাকিং সিস্টেম (৳ BDT)
           </p>
         </div>
 
         {/* Login Card */}
         <Card className="border border-white/10 bg-slate-900/80 backdrop-blur-xl shadow-2xl text-slate-100">
           <CardHeader className="space-y-1 pb-4">
-            <CardTitle className="text-lg text-white">Official Sign In</CardTitle>
+            <CardTitle className="text-lg text-white">দাপ্তরিক সাইন ইন (Official Sign In)</CardTitle>
             <CardDescription className="text-xs text-slate-400">
-              Enter your authorized naval credentials to access your ledger.
+              আপনার লেজার অ্যাক্সেস করতে অনুমোদিত নেভাল ক্রিডেনশিয়াল লিখুন।
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -74,7 +74,7 @@ export default function LoginPage() {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-1.5">
                 <label className="text-xs font-semibold text-slate-300">
-                  Official Email Address
+                  দাপ্তরিক ইমেইল ঠিকানা (Official Email)
                 </label>
                 <Input
                   type="email"
@@ -90,7 +90,7 @@ export default function LoginPage() {
 
               <div className="space-y-1.5">
                 <label className="text-xs font-semibold text-slate-300">
-                  Password
+                  পাসওয়ার্ড (Password)
                 </label>
                 <Input
                   type="password"
@@ -109,7 +109,7 @@ export default function LoginPage() {
                 disabled={isPending}
                 className="w-full h-11 text-sm font-semibold bg-gradient-to-r from-[#173e6b] to-[#1e528d] hover:from-[#1e528d] hover:to-[#286cb8] text-white border border-[#d4af37]/30"
               >
-                {isPending ? "Authenticating..." : "Sign In to Portal"}
+                {isPending ? "যাচাই করা হচ্ছে..." : "পোর্টালে প্রবেশ করুন (Sign In)"}
                 <ArrowRight className="w-4 h-4 ml-1" />
               </Button>
             </form>
@@ -117,7 +117,7 @@ export default function LoginPage() {
             {/* Quick Demo Switcher */}
             <div className="pt-4 border-t border-slate-800 space-y-2">
               <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block text-center">
-                Demo Accounts (1-Click Test)
+                ডেমো অ্যাকাউন্টসমূহ (১-ক্লিক টেস্ট)
               </span>
 
               <div className="grid grid-cols-2 gap-2">
@@ -128,9 +128,9 @@ export default function LoginPage() {
                 >
                   <div className="flex items-center gap-1.5 text-xs font-bold text-[#d4af37]">
                     <ShieldCheck className="w-3.5 h-3.5" />
-                    HQ Admin
+                    HQ অ্যাডমিন
                   </div>
-                  <p className="text-[10px] text-slate-400 truncate">Cmdr Tariqul (Full HQ)</p>
+                  <p className="text-[10px] text-slate-400 truncate">কমোডর তারিকুল (পূর্ণ নিয়ন্ত্রণ)</p>
                 </button>
 
                 <button
@@ -140,9 +140,9 @@ export default function LoginPage() {
                 >
                   <div className="flex items-center gap-1.5 text-xs font-bold text-orange-300">
                     <span className="w-2 h-2 rounded-full bg-orange-500" />
-                    Ceiling Reached (98%)
+                    সিলিং প্রান্তে (৯৮%)
                   </div>
-                  <p className="text-[10px] text-slate-400 truncate">Lt Cdr Sadia Rahman</p>
+                  <p className="text-[10px] text-slate-400 truncate">লেঃ কমান্ডার সাদিয়া রহমান</p>
                 </button>
 
                 <button
@@ -152,9 +152,9 @@ export default function LoginPage() {
                 >
                   <div className="flex items-center gap-1.5 text-xs font-bold text-amber-300">
                     <span className="w-2 h-2 rounded-full bg-amber-500" />
-                    Near Limit (96%)
+                    সীমার কাছে (৯৬%)
                   </div>
-                  <p className="text-[10px] text-slate-400 truncate">Cdr Faisal Ahmed</p>
+                  <p className="text-[10px] text-slate-400 truncate">কমান্ডার ফয়সাল আহমেদ</p>
                 </button>
 
                 <button
@@ -164,13 +164,13 @@ export default function LoginPage() {
                 >
                   <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-300">
                     <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                    Healthy (25%)
+                    স্বাভাবিক (২৫%)
                   </div>
-                  <p className="text-[10px] text-slate-400 truncate">Sub-Lt Asif Al-Mamun</p>
+                  <p className="text-[10px] text-slate-400 truncate">সাব-লেঃ আসিফ আল-মামুন</p>
                 </button>
               </div>
               <p className="text-[10px] text-slate-500 text-center pt-1">
-                All accounts use standard password: <code className="text-slate-300 font-mono">password123</code>
+                সকল টেস্ট অ্যাকাউন্টের পাসওয়ার্ড: <code className="text-slate-300 font-mono">password123</code>
               </p>
             </div>
           </CardContent>
@@ -178,7 +178,7 @@ export default function LoginPage() {
 
         {/* Security watermark */}
         <p className="text-center text-[11px] text-slate-500">
-          Bangladesh Navy Administrative Directorate &bull; Official Classified Financial Portal
+          নেভাল সিকিউর অথেন্টিকেশন &bull; অনুমোদিত সদস্য ব্যতীত প্রবেশ নিষেধ
         </p>
       </div>
     </div>

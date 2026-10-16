@@ -83,8 +83,8 @@ export default async function ExpensesPage({
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Expense Vouchers"
-        description={`Manage and review your recorded expenditures for ${activeYear.label}.`}
+        title="খরচের ভাউচারসমূহ (Expense Vouchers)"
+        description={`${activeYear.label} অর্থবছরে আপনার দাখিলকৃত খরচের রেকর্ড ও অনুমোদন স্থিতি।`}
       />
 
       <ExpensesClient

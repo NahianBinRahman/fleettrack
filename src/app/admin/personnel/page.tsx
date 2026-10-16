@@ -85,8 +85,8 @@ export default async function AdminPersonnelPage({
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Personnel &amp; Budget Management"
-        description={`Manage operational budget quotas, status, and authorizations for ${personnelRows.length} commissioned personnel in ${activeYear.label}.`}
+        title="কর্মকর্তা ও বাজেট ব্যবস্থাপনা (Personnel & Budget)"
+        description={`${activeYear.label} অর্থবছরে মোট ${personnelRows.length} জন কমিশনপ্রাপ্ত কর্মকর্তার অপারেশনাল বাজেট কোটা, সক্রিয়তা ও প্রশাসনিক অনুমোদন পরিচালনা করুন।`}
       />
 
       <PersonnelClient

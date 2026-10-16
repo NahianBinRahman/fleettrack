@@ -48,17 +48,17 @@ export function AdminExpensesClient({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-lg font-bold text-slate-900">
-            Organization-Wide Expenditure Ledger
+            সার্বিক ব্যয় লেজার (All Vouchers)
           </h2>
           <p className="text-xs text-slate-500">
-            Centrally audit, review, and authorize procurement vouchers across all naval units
+            সকল নৌ ইউনিটের প্রকিউরমেন্ট ভাউচারসমূহ কেন্দ্রীয়ভাবে অডিট, পর্যালোচনা ও অনুমোদন করুন
           </p>
         </div>
 
         {pendingCount > 0 && (
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-semibold">
             <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
-            {pendingCount} vouchers pending administrative approval
+            {pendingCount}টি ভাউচার প্রশাসনিক অনুমোদনের অপেক্ষায় রয়েছে
           </div>
         )}
       </div>

@@ -21,13 +21,13 @@ import {
 import { ExpenseRecord } from "./ExpenseDetailDrawer";
 
 const expenseSchema = z.object({
-  title: z.string().min(3, "Title must be at least 3 characters").max(100, "Title too long"),
-  categoryId: z.string().min(1, "Please select an expense category"),
+  title: z.string().min(3, "ভাউচারের শিরোনাম কমপক্ষে ৩ অক্ষরের হতে হবে").max(100, "শিরোনাম অতিরিক্ত দীর্ঘ"),
+  categoryId: z.string().min(1, "একটি ব্যয়ের খাত নির্বাচন করুন"),
   amountBDT: z
     .number()
-    .positive("Amount must be greater than zero"),
-  date: z.string().min(1, "Transaction date is required"),
-  referenceNumber: z.string().min(3, "Reference number is required"),
+    .positive("টাকার পরিমাণ ০ এর বেশি হতে হবে"),
+  date: z.string().min(1, "লেনদেনের তারিখ আবশ্যক"),
+  referenceNumber: z.string().min(3, "রেফারেন্স নম্বর আবশ্যক"),
   description: z.string().optional(),
   notes: z.string().optional(),
 });
@@ -108,7 +108,7 @@ export function ExpenseForm({
   const handleFormSubmit = async (formData: ExpenseFormData) => {
     if (isExceedingBudget) {
       setServerError(
-        `Submission Blocked: This voucher (${formatBDT(enteredAmountPaisa)}) exceeds your available annual budget (${formatBDT(effectiveAvailablePaisa)}). Personnel expenditures cannot exceed 100% of the authorized annual allocation.`
+        `দাখিল ব্যর্থ: এই ভাউচারটি (${formatBDT(enteredAmountPaisa)}) আপনার অবশিষ্ট বার্ষিক বাজেটের (${formatBDT(effectiveAvailablePaisa)}) চেয়ে বেশি। বার্ষিক বরাদ্দের ১০০% এর বেশি ব্যয় অনুমোদিত নয়।`
       );
       return;
     }
@@ -129,12 +129,12 @@ export function ExpenseForm({
       });
 
       if (!result.success) {
-        setServerError(result.error || "An error occurred while saving the voucher");
+        setServerError(result.error || "ভাউচার সংরক্ষণে ত্রুটি দেখা দিয়েছে");
       } else {
-        setSuccessMessage("Expense voucher successfully submitted to the ledger!");
+        setSuccessMessage("ব্যয় ভাউচারটি সফলভাবে লেজারে যুক্ত হয়েছে!");
       }
     } catch (err: any) {
-      setServerError(err.message || "An unexpected error occurred");
+      setServerError(err.message || "একটি অপ্রত্যাশিত ত্রুটি ঘটেছে");
     } finally {
       setIsSubmitting(false);
     }
@@ -145,24 +145,24 @@ export function ExpenseForm({
       {/* Live Budget Context Card */}
       <div className="p-4 bg-slate-900 text-white rounded-2xl border border-slate-800 shadow-md">
         <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-800 text-xs font-semibold uppercase tracking-wider text-slate-400">
-          <span>Active Allocation Context (FY 2026)</span>
-          <span className="text-[#d4af37]">Bangladeshi Taka</span>
+          <span>সক্রিয় বাজেট বরাদ্দ (FY 2026)</span>
+          <span className="text-[#d4af37]">বাংলাদেশি টাকা (BDT)</span>
         </div>
         <div className="grid grid-cols-3 gap-3 text-center">
           <div>
-            <p className="text-[11px] text-slate-400">Annual Budget</p>
+            <p className="text-[11px] text-slate-400">বার্ষিক বাজেট</p>
             <p className="text-sm sm:text-base font-bold text-slate-100 font-mono mt-0.5">
               {formatBDT(budgetContext.allocatedPaisa)}
             </p>
           </div>
           <div>
-            <p className="text-[11px] text-slate-400">Committed</p>
+            <p className="text-[11px] text-slate-400">ব্যয়কৃত</p>
             <p className="text-sm sm:text-base font-bold text-amber-400 font-mono mt-0.5">
               {formatBDT(budgetContext.committedPaisa)}
             </p>
           </div>
           <div>
-            <p className="text-[11px] text-slate-400">Available</p>
+            <p className="text-[11px] text-slate-400">অবশিষ্ট</p>
             <p
               className={`text-sm sm:text-base font-bold font-mono mt-0.5 ${
                 budgetContext.availablePaisa < BigInt(0)
@@ -180,10 +180,10 @@ export function ExpenseForm({
           <div className="mt-3 pt-3 border-t border-slate-800 flex items-start gap-2.5 text-rose-300 text-xs p-2.5 rounded-xl bg-rose-950/60 border border-rose-500/40">
             <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
             <div>
-              <p className="font-bold text-rose-200">Strict Budget Limit Enforced (100% Maximum)</p>
+              <p className="font-bold text-rose-200">কঠোর বাজেট সীমা প্রয়োগকৃত (সর্বোচ্চ ১০০%)</p>
               <p className="mt-0.5 leading-relaxed">
-                Entered voucher ({formatBDT(enteredAmountPaisa)}) exceeds your remaining available ceiling ({formatBDT(effectiveAvailablePaisa)}) by{" "}
-                <strong className="underline">{formatBDT(enteredAmountPaisa - effectiveAvailablePaisa)}</strong>. Expenditures cannot exceed 100% of allocation; submission is disabled.
+                প্রদত্ত ভাউচারের পরিমাণ ({formatBDT(enteredAmountPaisa)}) অবশিষ্ট বাজেটের সীমা ({formatBDT(effectiveAvailablePaisa)}) অপেক্ষা{" "}
+                <strong className="underline">{formatBDT(enteredAmountPaisa - effectiveAvailablePaisa)}</strong> বেশি। বরাদ্দের ১০০% অতিক্রম করার কারণে দাখিল ব্লক করা হয়েছে।
               </p>
             </div>
           </div>
@@ -209,10 +209,10 @@ export function ExpenseForm({
         {/* Title */}
         <div className="space-y-1.5">
           <label className="text-xs font-bold uppercase tracking-wider text-slate-700">
-            Voucher Title *
+            ভাউচারের শিরোনাম *
           </label>
           <Input
-            placeholder="e.g., Tactical Radar Maintenance Parts Replacement"
+            placeholder="যেমন: ট্যাকটিক্যাল রাডার রক্ষণাবেক্ষণ যন্ত্রাংশ প্রতিস্থাপন"
             {...register("title")}
           />
           {errors.title && (
@@ -225,7 +225,7 @@ export function ExpenseForm({
           {/* Amount in BDT */}
           <div className="space-y-1.5">
             <label className="text-xs font-bold uppercase tracking-wider text-slate-700">
-              Amount (৳ BDT) *
+              টাকার পরিমাণ (৳ BDT) *
             </label>
             <div className="relative">
               <span className="absolute left-3 top-2.5 text-slate-400 font-bold text-sm">
@@ -247,7 +247,7 @@ export function ExpenseForm({
           {/* Category */}
           <div className="space-y-1.5">
             <label className="text-xs font-bold uppercase tracking-wider text-slate-700">
-              Expense Category *
+              ব্যয়ের খাত / ক্যাটাগরি *
             </label>
             <select
               {...register("categoryId")}
@@ -270,7 +270,7 @@ export function ExpenseForm({
           {/* Date */}
           <div className="space-y-1.5">
             <label className="text-xs font-bold uppercase tracking-wider text-slate-700">
-              Transaction Date *
+              লেনদেনের তারিখ *
             </label>
             <Input
               type="date"
@@ -285,7 +285,7 @@ export function ExpenseForm({
           {/* Reference */}
           <div className="space-y-1.5">
             <label className="text-xs font-bold uppercase tracking-wider text-slate-700">
-              Reference / Voucher Number *
+              রেফারেন্স / ভাউচার নম্বর *
             </label>
             <Input
               icon={<Hash className="w-4 h-4 text-slate-400" />}
@@ -301,10 +301,10 @@ export function ExpenseForm({
         {/* Description */}
         <div className="space-y-1.5">
           <label className="text-xs font-bold uppercase tracking-wider text-slate-700">
-            Description / Purpose
+            বিবরণ / উদ্দেশ্য
           </label>
           <Textarea
-            placeholder="Detail the operational justification, requisition voucher number, or purpose of expenditure..."
+            placeholder="অপারেশনাল যৌক্তিকতা, রিকুইজিশন ভাউচার নম্বর বা ব্যয়ের বিস্তারিত উদ্দেশ্য..."
             rows={3}
             {...register("description")}
           />
@@ -313,10 +313,10 @@ export function ExpenseForm({
         {/* Administrative Notes */}
         <div className="space-y-1.5">
           <label className="text-xs font-bold uppercase tracking-wider text-slate-700">
-            Internal Administrative Notes
+            প্রশাসনিক নোট (যদি থাকে)
           </label>
           <Input
-            placeholder="e.g., Quotation approved by Officer Commanding, awaiting delivery challan"
+            placeholder="যেমন: কমান্ডিং অফিসার কর্তৃক কোটেশন অনুমোদিত, ডেলিভারি চালানের অপেক্ষা"
             {...register("notes")}
           />
         </div>
@@ -329,7 +329,7 @@ export function ExpenseForm({
             onClick={onCancel}
             disabled={isSubmitting}
           >
-            Cancel
+            বাতিল
           </Button>
           <Button
             type="submit"
@@ -338,12 +338,12 @@ export function ExpenseForm({
             className="min-w-32"
           >
             {isSubmitting
-              ? "Submitting..."
+              ? "সংরক্ষণ হচ্ছে..."
               : isExceedingBudget && enteredAmountBDT > 0
-              ? "Exceeds 100% Budget"
+              ? "১০০% বাজেট অতিক্রম করেছে"
               : initialData
-              ? "Save Changes"
-              : "Record Expense"}
+              ? "পরিবর্তন সংরক্ষণ করুন"
+              : "ব্যয় যুক্ত করুন"}
           </Button>
         </div>
       </form>

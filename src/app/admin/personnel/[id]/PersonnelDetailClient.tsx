@@ -101,13 +101,13 @@ export function PersonnelDetailClient({
             className="text-xs font-semibold text-slate-500 hover:text-blue-900 flex items-center gap-1.5"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            Back to Personnel Directory
+            কর্মকর্তাদের তালিকায় ফিরে যান
           </Link>
           <div className="flex items-center gap-3 pt-1">
             <h1 className="text-2xl font-black text-slate-900 tracking-tight">
               {officer.name}
             </h1>
-            <BudgetStatusBadge status={metrics.statusLevel} />
+            <BudgetStatusBadge status={metrics.statusLevel} bangla />
             <span
               className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${
                 isActive
@@ -115,7 +115,7 @@ export function PersonnelDetailClient({
                   : "bg-slate-100 text-slate-600"
               }`}
             >
-              {isActive ? "Active" : "Inactive"}
+              {isActive ? "সক্রিয়" : "নিষ্ক্রিয়"}
             </span>
           </div>
           <p className="text-xs text-slate-500 font-mono">
@@ -132,7 +132,7 @@ export function PersonnelDetailClient({
             className="shadow-sm"
           >
             <SlidersHorizontal className="w-4 h-4" />
-            Adjust Budget Allocation
+            বাজেট পরিবর্তন
           </Button>
 
           <Button
@@ -142,7 +142,7 @@ export function PersonnelDetailClient({
             className={isActive ? "text-rose-600 hover:bg-rose-50" : "text-emerald-600 hover:bg-emerald-50"}
           >
             <Power className="w-4 h-4" />
-            {isActive ? "Deactivate" : "Activate"}
+            {isActive ? "নিষ্ক্রিয় করুন" : "সক্রিয় করুন"}
           </Button>
         </div>
       </div>
@@ -150,41 +150,41 @@ export function PersonnelDetailClient({
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <BudgetStatCard
-          title="Assigned Annual Budget"
+          title="বরাদ্দকৃত বার্ষিক বাজেট"
           amountInPaisa={metrics.allocatedPaisa}
           icon={<Wallet className="w-5 h-5" />}
           variant="primary"
-          subtitle={`Ceiling for ${yearLabel}`}
+          subtitle={`${yearLabel} অর্থবছরের সিলিং`}
         />
         <BudgetStatCard
-          title="Total Spent"
+          title="মোট ব্যয়কৃত"
           amountInPaisa={metrics.spentPaisa}
           icon={<Receipt className="w-5 h-5" />}
           variant="spent"
           percentage={metrics.spentPercentage}
-          subtitle="Approved Vouchers"
+          subtitle="অনুমোদিত ভাউচার"
         />
         <BudgetStatCard
-          title="Pending / Processing"
+          title="প্রক্রিয়াধীন ব্যয়"
           amountInPaisa={metrics.pendingPaisa}
           icon={<Clock className="w-5 h-5" />}
           variant="pending"
-          subtitle="Awaiting Verification"
+          subtitle="যাচাইয়ের অপেক্ষায়"
         />
         <BudgetStatCard
-          title="Remaining Balance"
+          title="অবশিষ্ট ব্যালেন্স"
           amountInPaisa={metrics.availablePaisa}
           icon={<CheckCircle className="w-5 h-5" />}
           variant="remaining"
           highlight={!metrics.isOverBudget}
-          subtitle={metrics.isOverBudget ? "Deficit" : "Available Funds"}
+          subtitle={metrics.isOverBudget ? "বাজেট ঘাটতি" : "ব্যবহারযোগ্য তহবিল"}
         />
       </div>
 
       {/* Progress Ring + Monthly Trend */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-1">
-          <BudgetProgressRing metrics={metrics} />
+          <BudgetProgressRing metrics={metrics} bangla />
         </div>
 
         <div className="lg:col-span-2">
@@ -192,14 +192,14 @@ export function PersonnelDetailClient({
             <CardHeader className="pb-2">
               <CardTitle className="text-base flex items-center gap-2">
                 <TrendingUp className="w-4 h-4 text-[#0d2847]" />
-                Monthly Expenditure Velocity
+                মাসিক ব্যয়ের গতিপ্রকৃতি (Monthly Trend)
               </CardTitle>
               <CardDescription>
-                Expenditures incurred by this officer across {yearLabel}
+                {yearLabel} অর্থবছরে এই কর্মকর্তার মাসিক ব্যয়ের খতিয়ান
               </CardDescription>
             </CardHeader>
             <CardContent className="pt-2">
-              <MonthlySpendingChart data={monthlyChartData} height={250} />
+              <MonthlySpendingChart data={monthlyChartData} height={250} bangla />
             </CardContent>
           </Card>
         </div>
@@ -212,14 +212,14 @@ export function PersonnelDetailClient({
           <CardHeader className="pb-2">
             <CardTitle className="text-base flex items-center gap-2">
               <Tag className="w-4 h-4 text-[#0d2847]" />
-              Category Expenditure Distribution
+              খাতভিত্তিক ব্যয়ের বণ্টন
             </CardTitle>
             <CardDescription>
-              Spending broken down by official procurement category
+              অফিসিয়াল প্রকিউরমেন্ট খাত অনুসারে ব্যয়ের অনুপাত
             </CardDescription>
           </CardHeader>
           <CardContent className="pt-2">
-            <CategoryDistributionChart data={categoryChartData} height={220} />
+            <CategoryDistributionChart data={categoryChartData} height={220} bangla />
           </CardContent>
         </Card>
 
@@ -228,16 +228,16 @@ export function PersonnelDetailClient({
           <CardHeader className="pb-2">
             <CardTitle className="text-base flex items-center gap-2">
               <History className="w-4 h-4 text-[#0d2847]" />
-              Budget Modification History
+              বাজেট পরিবর্তনের ইতিহাস
             </CardTitle>
             <CardDescription>
-              Formal administrative directives and adjustments for this officer
+              এই কর্মকর্তার বাজেট বরাদ্দের পূর্ববর্তী প্রশাসনিক আদেশসমূহ
             </CardDescription>
           </CardHeader>
           <CardContent>
             {allocation.history.length === 0 ? (
               <p className="text-xs text-slate-400 py-4 text-center">
-                Initial allocation active with no subsequent amendments.
+                প্রাথমিক বরাদ্দ সক্রিয় রয়েছে, পরবর্তীতে কোনো সংশোধন করা হয়নি।
               </p>
             ) : (
               <div className="space-y-3 max-h-64 overflow-y-auto pr-1">
@@ -256,7 +256,7 @@ export function PersonnelDetailClient({
                     </div>
                     {hist.previousAmount > BigInt(0) && (
                       <p className="text-[11px] text-slate-500 font-mono">
-                        Previous: {formatBDT(hist.previousAmount)}
+                        পূর্ববর্তী: {formatBDT(hist.previousAmount)}
                       </p>
                     )}
                     {hist.reason && (
@@ -275,7 +275,7 @@ export function PersonnelDetailClient({
       {/* Transaction History for this Officer */}
       <div className="space-y-3">
         <h3 className="text-base font-bold text-slate-900">
-          Officer Expenditure Vouchers ({expenses.length})
+          কর্মকর্তার ব্যয় ভাউচারসমূহ ({expenses.length})
         </h3>
         <ExpenseTable
           expenses={expenses}

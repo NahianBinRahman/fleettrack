@@ -73,13 +73,13 @@ export function ExpenseDetailDrawer({
         <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
           <div>
             <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
-              Expenditure Voucher
+              ব্যয় ভাউচার (Voucher)
             </span>
             <div className="flex items-center gap-2 mt-1">
               <span className="font-mono text-xs font-semibold text-slate-700 bg-white px-2 py-0.5 rounded border border-slate-200">
                 {expense.referenceNumber}
               </span>
-              <ExpenseStatusBadge status={expense.status} />
+              <ExpenseStatusBadge status={expense.status} bangla />
             </div>
           </div>
           <button
@@ -99,7 +99,7 @@ export function ExpenseDetailDrawer({
             </h2>
             <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between">
               <span className="text-xs font-semibold uppercase text-slate-500">
-                Voucher Amount
+                ভাউচারের পরিমাণ
               </span>
               <MoneyDisplay
                 amountInPaisa={expense.amount}
@@ -131,7 +131,7 @@ export function ExpenseDetailDrawer({
             <div className="flex items-center justify-between py-2">
               <span className="text-slate-500 flex items-center gap-2">
                 <Tag className="w-4 h-4 text-slate-400" />
-                Category
+                ব্যয়ের খাত
               </span>
               <span className="font-semibold text-slate-800">
                 {expense.category.name}
@@ -141,7 +141,7 @@ export function ExpenseDetailDrawer({
             <div className="flex items-center justify-between py-2">
               <span className="text-slate-500 flex items-center gap-2">
                 <Calendar className="w-4 h-4 text-slate-400" />
-                Transaction Date
+                লেনদেনের তারিখ
               </span>
               <span className="font-medium text-slate-800">{formattedDate}</span>
             </div>
@@ -149,7 +149,7 @@ export function ExpenseDetailDrawer({
             <div className="flex items-center justify-between py-2">
               <span className="text-slate-500 flex items-center gap-2">
                 <Hash className="w-4 h-4 text-slate-400" />
-                Reference Number
+                রেফারেন্স নম্বর (Ref #)
               </span>
               <span className="font-mono text-slate-800">
                 {expense.referenceNumber}
@@ -162,7 +162,7 @@ export function ExpenseDetailDrawer({
             <div className="space-y-1.5 pt-2">
               <span className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
                 <FileText className="w-3.5 h-3.5 text-slate-400" />
-                Purpose / Description
+                উদ্দেশ্য / বিবরণ
               </span>
               <p className="text-xs text-slate-600 bg-slate-50 p-3 rounded-lg border border-slate-200/80 leading-relaxed whitespace-pre-wrap">
                 {expense.description}
@@ -175,7 +175,7 @@ export function ExpenseDetailDrawer({
             <div className="space-y-1.5 pt-1">
               <span className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
                 <AlertCircle className="w-3.5 h-3.5 text-amber-500" />
-                Administrative Notes
+                প্রশাসনিক নোট
               </span>
               <p className="text-xs text-slate-600 bg-amber-50/50 p-3 rounded-lg border border-amber-200/60 leading-relaxed">
                 {expense.notes}
@@ -197,7 +197,7 @@ export function ExpenseDetailDrawer({
                 }}
               >
                 <Pencil className="w-4 h-4" />
-                Edit Voucher
+                ভাউচার সংশোধন
               </Button>
             )}
             {onDelete && (
@@ -210,7 +210,7 @@ export function ExpenseDetailDrawer({
                 }}
               >
                 <Trash2 className="w-4 h-4" />
-                Delete
+                মুছে ফেলুন
               </Button>
             )}
           </div>

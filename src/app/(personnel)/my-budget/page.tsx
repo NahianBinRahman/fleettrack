@@ -20,6 +20,33 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 
+const categoryTranslation: Record<string, string> = {
+  "Fuel & Propulsion": "জ্বালানি ও পরিচালনা",
+  "Hull & Machinery Maintenance": "জাহাজ ও যন্ত্রপাতি মেরামত",
+  "Operational Provisions & Messing": "রেশন ও মেস সরবরাহ",
+  "Naval Aviation & Flight Operations": "এভিয়েশন ও ফ্লাইট কার্যক্রম",
+  "Medical Supplies & Healthcare": "চিকিৎসা সামগ্রী ও সেবা",
+  "Telecommunications & IT": "টেলিকম ও তথ্যপ্রযুক্তি",
+  "Training & Fleet Exercises": "প্রশিক্ষণ ও নৌমহড়া",
+  "Administrative Stationery & Supplies": "দাপ্তরিক স্টেশনারি ও সামগ্রী",
+  "Uniform & Personnel Gear": "পোশাক ও সামরিক সরঞ্জাম",
+  "Port Logistics & Berthing": "বন্দর লজিস্টিকস ও নোঙর",
+};
+
+function formatBengaliDateTime(d: Date | string): string {
+  const dateObj = new Date(d);
+  const day = dateObj.getDate();
+  const banglaMonths = [
+    "জানুয়ারি", "ফেব্রুয়ারি", "মার্চ", "এপ্রিল", "মে", "জুন",
+    "জুলাই", "আগস্ট", "সেপ্টেম্বর", "অক্টোবর", "নভেম্বর", "ডিসেম্বর"
+  ];
+  const month = banglaMonths[dateObj.getMonth()];
+  const year = dateObj.getFullYear();
+  const hours = dateObj.getHours().toString().padStart(2, "0");
+  const minutes = dateObj.getMinutes().toString().padStart(2, "0");
+  return `${day} ${month} ${year}, ${hours}:${minutes}`;
+}
+
 export default async function MyBudgetPage({
   searchParams,
 }: {
@@ -48,10 +75,10 @@ export default async function MyBudgetPage({
   }
 
   if (!activeYear) {
-    return <div className="p-8">No financial year available.</div>;
+    return <div className="p-8 text-center text-slate-500">কোনো অর্থবছর সক্রিয় নেই।</div>;
   }
 
-  // Load allocation with history
+  // হিস্ট্রি সহ ইউজারের বাজেট বরাদ্দ লোড
   const allocation = await db.budgetAllocation.findUnique({
     where: {
       userId_financialYearId: {
@@ -68,7 +95,7 @@ export default async function MyBudgetPage({
 
   const allocatedPaisa = allocation?.allocatedAmount ?? BigInt(0);
 
-  // Load user expenses
+  // ইউজারের খরচ লোড
   const expenses = await db.expense.findMany({
     where: {
       userId: user.id,
@@ -87,10 +114,11 @@ export default async function MyBudgetPage({
 
   const metrics = calculateBudgetMetrics(allocatedPaisa, spentPaisa, pendingPaisa);
 
-  // Group by category
+  // খাতভিত্তিক সারসংক্ষেপ
   const categorySummary: Record<string, { spent: bigint; count: number }> = {};
   expenses.forEach((e) => {
-    const name = e.category.name;
+    const rawName = e.category.name;
+    const name = categoryTranslation[rawName] || rawName;
     if (!categorySummary[name]) {
       categorySummary[name] = { spent: BigInt(0), count: 0 };
     }
@@ -101,36 +129,36 @@ export default async function MyBudgetPage({
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-7xl mx-auto">
       <PageHeader
-        title="My Annual Budget Allocation"
-        description={`Authoritative budget authorization breakdown for ${user.name} (${user.serviceId}) across ${activeYear.label}.`}
-        badge={<BudgetStatusBadge status={metrics.statusLevel} />}
+        title="আমার বার্ষিক বাজেট বরাদ্দ (My Budget Allocation)"
+        description={`${activeYear.label} অর্থবছরে ${user.name} (${user.serviceId})-এর জন্য নির্ধারিত সরকারি বাজেট সিলিং ও ব্যয়ের বিবরণ।`}
+        badge={<BudgetStatusBadge status={metrics.statusLevel} bangla={true} />}
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Column: Radial Visualization */}
+        {/* বাম কলাম: বাজেট প্রগ্রেস মিটার */}
         <div className="lg:col-span-1">
-          <BudgetProgressRing metrics={metrics} />
+          <BudgetProgressRing metrics={metrics} bangla={true} />
         </div>
 
-        {/* Right Column: Allocation Directive & Key Metrics */}
+        {/* ডান কলাম: বরাদ্দ কোটা ও হিসাব কার্ড */}
         <div className="lg:col-span-2 space-y-6">
           <Card className="border-slate-200/80 shadow-xs">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-base flex items-center gap-2">
+            <CardHeader className="pb-3 border-b border-slate-100">
+              <CardTitle className="text-base font-bold text-slate-900 flex items-center gap-2">
                 <ShieldCheck className="w-5 h-5 text-[#0d2847]" />
-                Official Allocation Quota
+                অফিসিয়াল বরাদ্দ কোটা (Sanctioned Quota)
               </CardTitle>
-              <CardDescription>
-                Sanctioned ceiling approved by Naval Administrative Directorate
+              <CardDescription className="text-xs text-slate-500 mt-0.5">
+                নেভাল প্রশাসনিক কমান্ড কর্তৃক অনুমোদিত বার্ষিক সিলিং
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 pt-4">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 bg-slate-50 rounded-xl border border-slate-200/80 text-center">
                 <div>
                   <span className="text-[11px] text-slate-500 font-semibold uppercase">
-                    Sanctioned Allocation
+                    অনুমোদিত মোট বরাদ্দ
                   </span>
                   <div className="mt-1">
                     <MoneyDisplay
@@ -143,7 +171,7 @@ export default async function MyBudgetPage({
 
                 <div>
                   <span className="text-[11px] text-slate-500 font-semibold uppercase">
-                    Total Committed
+                    মোট ব্যবহৃত / দায়বদ্ধ
                   </span>
                   <div className="mt-1">
                     <MoneyDisplay
@@ -153,13 +181,13 @@ export default async function MyBudgetPage({
                     />
                   </div>
                   <span className="text-[10px] text-slate-400">
-                    {metrics.committedPercentage.toFixed(1)}% of ceiling
+                    বরাদ্দের {metrics.committedPercentage.toFixed(1)}%
                   </span>
                 </div>
 
                 <div>
                   <span className="text-[11px] text-slate-500 font-semibold uppercase">
-                    Available Balance
+                    অবশিষ্ট ব্যালেন্স
                   </span>
                   <div className="mt-1">
                     <MoneyDisplay
@@ -169,7 +197,7 @@ export default async function MyBudgetPage({
                     />
                   </div>
                   <span className="text-[10px] text-slate-400">
-                    {metrics.isOverBudget ? "Deficit" : "Remaining"}
+                    {metrics.isOverBudget ? "ঘাটতি (Deficit)" : "নতুন খরচের জন্য অবশিষ্ট"}
                   </span>
                 </div>
               </div>
@@ -178,7 +206,7 @@ export default async function MyBudgetPage({
                 <div className="p-3 bg-blue-50/70 border border-blue-200 rounded-lg text-xs text-blue-950 flex items-start gap-2.5">
                   <FileCheck className="w-4 h-4 text-blue-700 shrink-0 mt-0.5" />
                   <div>
-                    <span className="font-bold">Administrative Directive: </span>
+                    <span className="font-bold">প্রশাসনিক নির্দেশনা (Directive): </span>
                     {allocation.notes}
                   </div>
                 </div>
@@ -186,21 +214,21 @@ export default async function MyBudgetPage({
             </CardContent>
           </Card>
 
-          {/* Allocation Modification History */}
+          {/* বরাদ্দ পরিবর্তন ও অডিট হিস্ট্রি */}
           <Card className="border-slate-200/80 shadow-xs">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-base flex items-center gap-2">
+            <CardHeader className="pb-3 border-b border-slate-100">
+              <CardTitle className="text-base font-bold text-slate-900 flex items-center gap-2">
                 <History className="w-4 h-4 text-[#0d2847]" />
-                Budget Allocation Audit History
+                বরাদ্দ সমন্বয় ও অডিট রেকর্ড (Audit History)
               </CardTitle>
-              <CardDescription>
-                Historical modifications and sanction directives issued by Headquarters
+              <CardDescription className="text-xs text-slate-500 mt-0.5">
+                হেডকোয়ার্টার্স কর্তৃক বরাদ্দের অতীত সমন্বয় ও অনুমোদনের ইতিহাস
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="pt-3">
               {!allocation?.history || allocation.history.length === 0 ? (
-                <p className="text-xs text-slate-400">
-                  Initial baseline allocation active with no subsequent amendments.
+                <p className="text-xs text-slate-400 py-3">
+                  প্রাথমিক বেসলাইন বরাদ্দ সক্রিয় রয়েছে, কোনো পরিবর্তন করা হয়নি।
                 </p>
               ) : (
                 <div className="space-y-3">
@@ -212,11 +240,11 @@ export default async function MyBudgetPage({
                       <div className="space-y-0.5">
                         <div className="flex items-center gap-2">
                           <span className="font-bold text-slate-900">
-                            Allocation Set to {formatBDT(hist.newAmount)}
+                            সংশোধিত বরাদ্দ: {formatBDT(hist.newAmount)}
                           </span>
                           {hist.previousAmount > BigInt(0) && (
                             <span className="text-[10px] text-slate-500 font-mono">
-                              (from {formatBDT(hist.previousAmount)})
+                              (পূর্বে ছিল {formatBDT(hist.previousAmount)})
                             </span>
                           )}
                         </div>
@@ -227,7 +255,7 @@ export default async function MyBudgetPage({
                         )}
                       </div>
                       <span className="text-[11px] text-slate-400 font-mono shrink-0">
-                        {format(new Date(hist.createdAt), "dd MMM yyyy, HH:mm")}
+                        {formatBengaliDateTime(hist.createdAt)}
                       </span>
                     </div>
                   ))}
@@ -238,18 +266,18 @@ export default async function MyBudgetPage({
         </div>
       </div>
 
-      {/* Category Consumption Breakdown */}
+      {/* খাতভিত্তিক খরচের বিবরণ */}
       <Card className="border-slate-200/80 shadow-xs">
-        <CardHeader>
-          <CardTitle className="text-base flex items-center gap-2">
+        <CardHeader className="border-b border-slate-100">
+          <CardTitle className="text-base font-bold text-slate-900 flex items-center gap-2">
             <Tag className="w-4 h-4 text-[#0d2847]" />
-            Category-wise Commitment Breakdown
+            খাতভিত্তিক ব্যয়ের বিবরণ (Category Breakdown)
           </CardTitle>
-          <CardDescription>
-            Cumulative expenditure by operational category for this financial year
+          <CardDescription className="text-xs text-slate-500 mt-0.5">
+            চলতি অর্থবছরে বিভিন্ন অপারেশনাল খাতে মোট ব্যয়ের হিসাব
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pt-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {Object.entries(categorySummary).map(([catName, data]) => {
               const catPercent =
@@ -267,7 +295,7 @@ export default async function MyBudgetPage({
                       {catName}
                     </span>
                     <span className="text-[11px] font-mono text-slate-500">
-                      {data.count} vouchers
+                      {data.count} টি ভাউচার
                     </span>
                   </div>
 
@@ -278,7 +306,7 @@ export default async function MyBudgetPage({
                     </span>
                   </div>
 
-                  {/* Micro progress bar */}
+                  {/* মাইক্রো প্রগ্রেস বার */}
                   <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
                     <div
                       className="h-full bg-[#163860] rounded-full"

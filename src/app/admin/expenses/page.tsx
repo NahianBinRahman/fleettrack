@@ -57,8 +57,8 @@ export default async function AdminExpensesPage({
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Organization Expenditure Vouchers"
-        description={`Audit and monitor all official procurement vouchers across naval units for ${activeYear.label}.`}
+        title="সার্বিক ব্যয় ভাউচার ও নিরীক্ষা (Expenditures)"
+        description={`${activeYear.label} অর্থবছরে সকল নৌ ইউনিটের অফিসিয়াল প্রকিউরমেন্ট ভাউচার অডিট ও নিরীক্ষণ করুন।`}
       />
 
       <AdminExpensesClient

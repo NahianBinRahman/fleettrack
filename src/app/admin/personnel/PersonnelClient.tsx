@@ -68,9 +68,9 @@ export function PersonnelClient({
       });
 
       if (!res.success) {
-        setErrorMessage(res.error || "Failed to create account.");
+        setErrorMessage(res.error || "অ্যাকাউন্ট তৈরিতে ব্যর্থ হয়েছে।");
       } else {
-        setSuccessMessage("Officer account successfully created and enrolled with allocation!");
+        setSuccessMessage("কর্মকর্তার অ্যাকাউন্ট সফলভাবে তৈরি ও বাজেট বরাদ্দ সম্পন্ন হয়েছে!");
         // Reset form
         setName("");
         setEmail("");
@@ -83,7 +83,7 @@ export function PersonnelClient({
         }, 1500);
       }
     } catch (err: any) {
-      setErrorMessage(err.message || "An unexpected error occurred.");
+      setErrorMessage(err.message || "একটি অপ্রত্যাশিত ত্রুটি ঘটেছে।");
     } finally {
       setIsSubmitting(false);
     }
@@ -94,10 +94,10 @@ export function PersonnelClient({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-lg font-bold text-slate-900">
-            Commissioned Personnel Directory
+            কর্মকর্তাদের তালিকা ও ডিরেক্টরি (Directory)
           </h2>
           <p className="text-xs text-slate-500">
-            Audit, reallocate budgets, and manage access privileges across naval units
+            নৌ ইউনিটসমূহে বাজেট পুনর্বণ্টন, অডিট ও অ্যাক্সেস প্রিভিলেজ পরিচালনা করুন
           </p>
         </div>
 
@@ -107,7 +107,7 @@ export function PersonnelClient({
           className="shadow-sm"
         >
           <UserPlus className="w-4 h-4" />
-          Enroll Personnel Member
+          নতুন কর্মকর্তা যুক্ত করুন
         </Button>
       </div>
 
@@ -125,13 +125,13 @@ export function PersonnelClient({
             <div className="p-6 bg-[#091726] text-white flex items-center justify-between">
               <div>
                 <span className="text-[11px] font-bold uppercase tracking-wider text-[#d4af37]">
-                  Personnel Enrolment
+                  কর্মকর্তা নিবন্ধন
                 </span>
                 <h3 className="text-lg font-bold text-white mt-0.5">
-                  Register New Naval Personnel Member
+                  নতুন নৌ কর্মকর্তা নিবন্ধন করুন
                 </h3>
                 <p className="text-xs text-slate-400">
-                  Initial budget quota will be allocated for {activeYearLabel}
+                  {activeYearLabel} অর্থবছরের জন্য প্রাথমিক বাজেট কোটা বরাদ্দ করা হবে
                 </p>
               </div>
               <button
@@ -159,10 +159,10 @@ export function PersonnelClient({
 
               <div className="space-y-1.5">
                 <label className="text-xs font-bold uppercase tracking-wider text-slate-700">
-                  Full Officer Name *
+                  কর্মকর্তার পূর্ণ নাম *
                 </label>
                 <Input
-                  placeholder="e.g. Commander M. Rashidul Haque, psc, BN"
+                  placeholder="যেমন: কমান্ডার এম. রাশিদুল হক, পিএসসি, বিএন"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
@@ -172,7 +172,7 @@ export function PersonnelClient({
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold uppercase tracking-wider text-slate-700">
-                    Service ID (Official #) *
+                    সার্ভিস আইডি (Official #) *
                   </label>
                   <Input
                     placeholder="NAV-2088"
@@ -185,18 +185,18 @@ export function PersonnelClient({
 
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold uppercase tracking-wider text-slate-700">
-                    Commissioned Rank *
+                    কমিশনড র্যাঙ্ক (পদমর্যাদা) *
                   </label>
                   <select
                     value={rank}
                     onChange={(e) => setRank(e.target.value)}
                     className="w-full h-10 px-3 py-2 bg-white rounded-lg border border-slate-300 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0d2847]"
                   >
-                    <option value="Captain">Captain</option>
-                    <option value="Commander">Commander</option>
-                    <option value="Lieutenant Commander">Lieutenant Commander</option>
-                    <option value="Lieutenant">Lieutenant</option>
-                    <option value="Sub-Lieutenant">Sub-Lieutenant</option>
+                    <option value="Captain">Captain (ক্যাপ্টেন)</option>
+                    <option value="Commander">Commander (কমান্ডার)</option>
+                    <option value="Lieutenant Commander">Lieutenant Commander (লেফটেন্যান্ট কমান্ডার)</option>
+                    <option value="Lieutenant">Lieutenant (লেফটেন্যান্ট)</option>
+                    <option value="Sub-Lieutenant">Sub-Lieutenant (সাব-লেফটেন্যান্ট)</option>
                     <option value="Chief Petty Officer">Chief Petty Officer</option>
                   </select>
                 </div>
@@ -204,10 +204,10 @@ export function PersonnelClient({
 
               <div className="space-y-1.5">
                 <label className="text-xs font-bold uppercase tracking-wider text-slate-700">
-                  Assigned Operational Unit *
+                  নিযুক্ত অপারেশনাল ইউনিট *
                 </label>
                 <Input
-                  placeholder="e.g. Coastal Surveillance Squadron Alpha"
+                  placeholder="যেমন: কোস্টাল সার্ভিল্যান্স স্কোয়াড্রন আলফা"
                   value={unit}
                   onChange={(e) => setUnit(e.target.value)}
                   required
@@ -216,7 +216,7 @@ export function PersonnelClient({
 
               <div className="space-y-1.5">
                 <label className="text-xs font-bold uppercase tracking-wider text-slate-700">
-                  Official Email Address *
+                  অফিসিয়াল ইমেইল ঠিকানা *
                 </label>
                 <Input
                   type="email"
@@ -229,7 +229,7 @@ export function PersonnelClient({
 
               <div className="space-y-1.5">
                 <label className="text-xs font-bold uppercase tracking-wider text-slate-700">
-                  Initial Annual Allocation (৳ BDT) *
+                  প্রাথমিক বার্ষিক বরাদ্দ (৳ BDT) *
                 </label>
                 <div className="relative">
                   <span className="absolute left-3 top-2.5 text-slate-400 font-bold text-sm">
@@ -246,7 +246,7 @@ export function PersonnelClient({
                   />
                 </div>
                 <p className="text-[11px] text-slate-500">
-                  Default temporary account password will be set to: <code className="font-mono text-slate-700">password123</code>
+                  ডিফল্ট অস্থায়ী পাসওয়ার্ড নির্ধারণ করা হবে: <code className="font-mono text-slate-700">password123</code>
                 </p>
               </div>
 
@@ -257,14 +257,14 @@ export function PersonnelClient({
                   onClick={() => setIsAddModalOpen(false)}
                   disabled={isSubmitting}
                 >
-                  Cancel
+                  বাতিল
                 </Button>
                 <Button
                   type="submit"
                   variant="naval"
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? "Enrolling..." : "Enroll Officer"}
+                  {isSubmitting ? "নিবন্ধন হচ্ছে..." : "কর্মকর্তা যুক্ত করুন"}
                 </Button>
               </div>
             </form>

@@ -61,19 +61,19 @@ export function BudgetAdjustModal({
     setErrorMessage(null);
 
     if (newAmountBDT <= 0) {
-      setErrorMessage("New allocation amount must be greater than zero.");
+      setErrorMessage("নতুন বরাদ্দের পরিমাণ অবশ্যই ০-এর বেশি হতে হবে।");
       return;
     }
 
     if (isBelowCommitted && !allowBelowCommitted) {
       setErrorMessage(
-        "Allocation cannot be reduced below already committed funds without explicit administrative override acknowledgment."
+        "ইতিমধ্যে ব্যয়কৃত পরিমাণের চেয়ে নিচে বরাদ্দ কমাতে বিশেষ প্রশাসনিক ওভাররাইড সম্মতি প্রদান করা আবশ্যক।"
       );
       return;
     }
 
     if (!reason.trim()) {
-      setErrorMessage("Please state the administrative justification for adjusting this officer's allocation.");
+      setErrorMessage("অনুগ্রহ করে এই কর্মকর্তার বাজেট পরিবর্তনের প্রশাসনিক কারণ বা নির্দেশনা উল্লেখ করুন।");
       return;
     }
 
@@ -86,12 +86,12 @@ export function BudgetAdjustModal({
       });
 
       if (!result.success) {
-        setErrorMessage(result.error || "Failed to update allocation.");
+        setErrorMessage(result.error || "বরাদ্দ হালনাগাদ করতে ব্যর্থ হয়েছে।");
       } else {
         onClose();
       }
     } catch (err: any) {
-      setErrorMessage(err.message || "An error occurred.");
+      setErrorMessage(err.message || "একটি ত্রুটি দেখা দিয়েছে।");
     } finally {
       setIsSubmitting(false);
     }
@@ -104,10 +104,10 @@ export function BudgetAdjustModal({
         <div className="p-6 bg-[#091726] text-white flex items-center justify-between">
           <div>
             <span className="text-[11px] font-bold uppercase tracking-wider text-[#d4af37]">
-              Administrative Authorization
+              প্রশাসনিক অনুমোদন
             </span>
             <h3 className="text-lg font-bold text-white mt-0.5">
-              Adjust Annual Budget Allocation
+              বার্ষিক বাজেট বরাদ্দ পরিবর্তন
             </h3>
             <p className="text-xs text-slate-300">
               {personnel.name} ({personnel.serviceId})
@@ -127,18 +127,18 @@ export function BudgetAdjustModal({
           <div className="grid grid-cols-2 gap-3 p-4 bg-slate-50 rounded-xl border border-slate-200">
             <div>
               <span className="text-[10px] font-bold uppercase text-slate-500">
-                Current Allocation
+                বর্তমান বরাদ্দ
               </span>
               <p className="text-base font-bold font-mono text-slate-900 mt-0.5">
                 {formatBDT(personnel.currentAllocatedPaisa)}
               </p>
               <p className="text-[11px] text-slate-500 mt-1 font-mono">
-                Committed: {formatBDT(committedPaisa)}
+                ব্যয়কৃত: {formatBDT(committedPaisa)}
               </p>
             </div>
             <div>
               <span className="text-[10px] font-bold uppercase text-slate-500">
-                New Proposed Allocation
+                প্রস্তাবিত নতুন বরাদ্দ
               </span>
               <p className="text-base font-bold font-mono text-blue-900 mt-0.5">
                 {formatBDT(newAmountPaisa)}
@@ -157,7 +157,7 @@ export function BudgetAdjustModal({
                   {formatBDT(differencePaisa)}
                 </span>
                 <span className="text-[10px] text-slate-400 font-normal">
-                  ({differencePaisa > BigInt(0) ? "increment" : differencePaisa < BigInt(0) ? "reduction" : "no change"})
+                  ({differencePaisa > BigInt(0) ? "বৃদ্ধি" : differencePaisa < BigInt(0) ? "হ্রাস" : "অপরিবর্তিত"})
                 </span>
               </p>
             </div>
@@ -166,7 +166,7 @@ export function BudgetAdjustModal({
           {/* Resulting Available Context */}
           <div className="p-3 rounded-lg bg-blue-50/70 border border-blue-200/80 flex items-center justify-between text-xs">
             <span className="text-blue-950 font-medium">
-              Resulting Available Balance:
+              চূড়ান্ত অবশিষ্ট ব্যালেন্স:
             </span>
             <span
               className={`font-mono font-bold ${
@@ -182,11 +182,11 @@ export function BudgetAdjustModal({
             <div className="p-4 rounded-xl border border-rose-300 bg-rose-50 text-rose-900 text-xs space-y-2">
               <div className="flex items-center gap-2 font-bold text-rose-800">
                 <ShieldAlert className="w-4 h-4 text-rose-600" />
-                Critical Business Rule Warning
+                সতর্কবার্তা: বাজেট নিয়ম লঙ্ঘন
               </div>
               <p className="leading-relaxed text-rose-700">
-                The proposed allocation ({formatBDT(newAmountPaisa)}) is lower than the officer's already committed funds ({formatBDT(committedPaisa)}). Reducing below committed vouchers will put this account into a budget deficit of{" "}
-                <strong>{formatBDT(-newAvailablePaisa)}</strong>.
+                প্রস্তাবিত বরাদ্দ ({formatBDT(newAmountPaisa)}) ইতিমধ্যে ব্যয়কৃত তহবিলের ({formatBDT(committedPaisa)}) চেয়ে কম। ব্যয়কৃত তহবিলের নিচে বরাদ্দ কমালে অ্যাকাউন্টটিতে{" "}
+                <strong>{formatBDT(-newAvailablePaisa)}</strong> ঘাটতি সৃষ্টি হবে।
               </p>
               <label className="flex items-center gap-2 pt-1 font-medium text-rose-900 cursor-pointer">
                 <input
@@ -195,7 +195,7 @@ export function BudgetAdjustModal({
                   onChange={(e) => setAllowBelowCommitted(e.target.checked)}
                   className="rounded text-rose-600 focus:ring-rose-500"
                 />
-                Confirm administrative authority override to reduce below committed amount
+                ব্যয়কৃত পরিমাণের নিচে বরাদ্দ কমাতে বিশেষ প্রশাসনিক অনুমোদন নিশ্চিত করছি
               </label>
             </div>
           )}
@@ -203,7 +203,7 @@ export function BudgetAdjustModal({
           {/* Input New Amount */}
           <div className="space-y-1.5">
             <label className="text-xs font-bold uppercase tracking-wider text-slate-700">
-              New Annual Allocation (৳ BDT) *
+              নতুন বার্ষিক বরাদ্দ (৳ BDT) *
             </label>
             <div className="relative">
               <span className="absolute left-3 top-2.5 text-slate-400 font-bold text-sm">
@@ -223,17 +223,17 @@ export function BudgetAdjustModal({
           {/* Justification / Reason */}
           <div className="space-y-1.5">
             <label className="text-xs font-bold uppercase tracking-wider text-slate-700">
-              Official Directive / Reason for Adjustment *
+              বরাদ্দ পরিবর্তনের সরকারি কারণ বা নির্দেশনা *
             </label>
             <Textarea
-              placeholder="e.g., Authorized mid-year budget increment per Naval Administrative Order #44/2026 for urgent drydock deployment."
+              placeholder="যেমন: নৌ প্রশাসনিক আদেশ ৪৪/২০২৬ অনুযায়ী ড্রাই ডক জরুরি অপারেশনের জন্য মধ্যবর্তী বরাদ্দ বৃদ্ধি।"
               rows={3}
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               required
             />
             <p className="text-[11px] text-slate-500">
-              This adjustment and rationale will be permanently recorded in the immutable audit ledger.
+              এই সমন্বয় ও কারণ অডিট লেজারে স্থায়ীভাবে সংরক্ষিত হবে।
             </p>
           </div>
 
@@ -252,14 +252,14 @@ export function BudgetAdjustModal({
               onClick={onClose}
               disabled={isSubmitting}
             >
-              Cancel
+              বাতিল
             </Button>
             <Button
               type="submit"
               variant="naval"
               disabled={isSubmitting || (isBelowCommitted && !allowBelowCommitted)}
             >
-              {isSubmitting ? "Authorizing..." : "Authorize Allocation"}
+              {isSubmitting ? "অনুমোদন হচ্ছে..." : "বরাদ্দ অনুমোদন করুন"}
             </Button>
           </div>
         </form>

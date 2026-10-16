@@ -123,12 +123,12 @@ export default async function AdminReportsPage({
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Command Budget &amp; Expenditure Reports"
-        description={`Organization-wide institutional report and audit analytics for ${activeYear.label}.`}
+        title="কমান্ড বাজেট ও সার্বিক নিরীক্ষা রিপোর্ট (Reports)"
+        description={`${activeYear.label} অর্থবছরে সমগ্র সংস্থার বাজেট ব্যবহার, খাতভিত্তিক ব্যয় ও অডিট বিশ্লেষণ প্রতিবেদন।`}
       >
         <Button variant="outline" size="sm" className="print:hidden">
           <Printer className="w-4 h-4 mr-1.5" />
-          Print / Export PDF
+          প্রিন্ট / PDF রিপোর্ট
         </Button>
       </PageHeader>
 
@@ -138,20 +138,20 @@ export default async function AdminReportsPage({
         <div className="border-b border-slate-200 pb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1">
             <span className="text-[11px] font-bold uppercase tracking-widest text-[#0d2847]">
-              Naval Headquarters &bull; Administrative Directorate
+              নৌ সদর দপ্তর &bull; প্রশাসনিক পরিদপ্তর
             </span>
             <h2 className="text-xl font-bold text-slate-900">
-              Annual Fiscal Audit &amp; Unit Expenditure Report
+              বার্ষিক আর্থিক অডিট ও ইউনিট ব্যয় প্রতিবেদন (Annual Fiscal Audit)
             </h2>
             <p className="text-xs text-slate-500 font-mono">
-              Audit Period: {activeYear.label} &bull; Generated: {format(new Date(), "dd MMMM yyyy, HH:mm")}
+              অডিট সময়কাল: {activeYear.label} &bull; প্রস্তুতের সময়: {format(new Date(), "dd MMMM yyyy, HH:mm")}
             </p>
           </div>
 
           <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs space-y-1 sm:text-right">
             <p className="font-bold text-slate-900">{user.name}</p>
             <p className="text-slate-600">{user.rank} &bull; {user.serviceId}</p>
-            <p className="text-slate-500">Directorate of Naval Administration</p>
+            <p className="text-slate-500">নৌ প্রশাসন পরিদপ্তর (Naval HQ)</p>
           </div>
         </div>
 
@@ -159,7 +159,7 @@ export default async function AdminReportsPage({
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-5 bg-slate-50 rounded-xl border border-slate-200 text-center">
           <div>
             <span className="text-[10px] font-bold uppercase text-slate-500">
-              Org Budget Ceiling
+              সংস্থার বাজেট সিলিং
             </span>
             <p className="text-lg font-bold font-mono text-blue-950 mt-1">
               {formatBDT(activeYear.totalBudget)}
@@ -168,38 +168,38 @@ export default async function AdminReportsPage({
 
           <div>
             <span className="text-[10px] font-bold uppercase text-slate-500">
-              Total Distributed
+              মোট বরাদ্দকৃত তহবিল
             </span>
             <p className="text-lg font-bold font-mono text-slate-800 mt-1">
               {formatBDT(totalAllocatedPaisa)}
             </p>
             <span className="text-[10px] text-slate-400">
-              {((Number(totalAllocatedPaisa) / Number(activeYear.totalBudget)) * 100).toFixed(1)}% of ceiling
+              {((Number(totalAllocatedPaisa) / Number(activeYear.totalBudget)) * 100).toFixed(1)}% সিলিংয়ের
             </span>
           </div>
 
           <div>
             <span className="text-[10px] font-bold uppercase text-slate-500">
-              Unallocated Command Reserve
+              অব্যয়িত কমান্ড রিজার্ভ
             </span>
             <p className="text-lg font-bold font-mono text-amber-700 mt-1">
               {formatBDT(activeYear.totalBudget - totalAllocatedPaisa)}
             </p>
             <span className="text-[10px] text-slate-400">
-              {((Number(activeYear.totalBudget - totalAllocatedPaisa) / Number(activeYear.totalBudget)) * 100).toFixed(1)}% reserve
+              {((Number(activeYear.totalBudget - totalAllocatedPaisa) / Number(activeYear.totalBudget)) * 100).toFixed(1)}% রিজার্ভ
             </span>
           </div>
 
           <div>
             <span className="text-[10px] font-bold uppercase text-slate-500">
-              Allocated Officers Pool
+              বরাদ্দপ্রাপ্ত কর্মকর্তা
             </span>
             <p className="text-lg font-bold font-mono text-emerald-700 mt-1">
               {personnel.length}{" "}
-              <span className="text-xs font-normal text-slate-500">Commissioned</span>
+              <span className="text-xs font-normal text-slate-500">জন কমিশনপ্রাপ্ত</span>
             </p>
             <span className="text-[10px] text-slate-400">
-              100% Active Naval Service
+              ১০০% সক্রিয় নৌ সার্ভিস
             </span>
           </div>
         </div>
@@ -209,18 +209,18 @@ export default async function AdminReportsPage({
           <div className="space-y-3">
             <h3 className="text-sm font-bold uppercase tracking-wider text-amber-700 flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 text-amber-600" />
-              High-Utilization Exception Roster (&ge; 80% Committed)
+              উচ্চ ব্যয় পর্যবেক্ষণ তালিকা (&ge; ৮০% ব্যয়কৃত)
             </h3>
             <div className="border border-amber-200 bg-amber-50/30 rounded-xl overflow-hidden">
               <table className="w-full text-left text-xs">
                 <thead className="bg-amber-100/60 text-[11px] font-bold uppercase text-amber-900">
                   <tr>
-                    <th className="py-2.5 px-3">Officer &amp; Service ID</th>
-                    <th className="py-2.5 px-3">Unit</th>
-                    <th className="py-2.5 px-3 text-right">Allocated</th>
-                    <th className="py-2.5 px-3 text-right">Committed</th>
-                    <th className="py-2.5 px-3 text-right">Balance</th>
-                    <th className="py-2.5 px-3 text-center">Status</th>
+                    <th className="py-2.5 px-3">কর্মকর্তা ও সার্ভিস আইডি</th>
+                    <th className="py-2.5 px-3">ইউনিট</th>
+                    <th className="py-2.5 px-3 text-right">বরাদ্দকৃত</th>
+                    <th className="py-2.5 px-3 text-right">ব্যয়কৃত</th>
+                    <th className="py-2.5 px-3 text-right">অবশিষ্ট</th>
+                    <th className="py-2.5 px-3 text-center">স্ট্যাটাস</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-amber-100">
@@ -255,6 +255,7 @@ export default async function AdminReportsPage({
                           status={item.metrics.statusLevel}
                           showIcon={false}
                           className="text-[10px]"
+                          bangla
                         />
                       </td>
                     </tr>
@@ -269,16 +270,16 @@ export default async function AdminReportsPage({
         <div className="space-y-3">
           <h3 className="text-sm font-bold uppercase tracking-wider text-slate-700 flex items-center gap-2">
             <Layers className="w-4 h-4 text-[#0d2847]" />
-            Organization Category Expenditure Statement
+            সংস্থার খাতভিত্তিক ব্যয় বিবরণী
           </h3>
           <div className="border border-slate-200 rounded-xl overflow-hidden">
             <table className="w-full text-left text-xs">
               <thead className="bg-slate-100 text-[11px] font-bold uppercase text-slate-600">
                 <tr>
-                  <th className="py-2.5 px-4">Procurement Category</th>
-                  <th className="py-2.5 px-4 text-center">Total Vouchers</th>
-                  <th className="py-2.5 px-4 text-right">Committed Amount (BDT)</th>
-                  <th className="py-2.5 px-4 text-right">% of Organization Budget</th>
+                  <th className="py-2.5 px-4">প্রকিউরমেন্ট খাত</th>
+                  <th className="py-2.5 px-4 text-center">মোট ভাউচার</th>
+                  <th className="py-2.5 px-4 text-right">ব্যয়কৃত পরিমাণ (BDT)</th>
+                  <th className="py-2.5 px-4 text-right">বাজেটের শতকরা হার</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -314,19 +315,19 @@ export default async function AdminReportsPage({
         <div className="space-y-3">
           <h3 className="text-sm font-bold uppercase tracking-wider text-slate-700 flex items-center gap-2">
             <Building2 className="w-4 h-4 text-[#0d2847]" />
-            Complete Personnel Allocation &amp; Spend Ledger ({personnelReportList.length} Officers)
+            সকল কর্মকর্তার বাজেট বরাদ্দ ও ব্যয় খতিয়ান ({personnelReportList.length} জন কর্মকর্তা)
           </h3>
           <div className="border border-slate-200 rounded-xl overflow-hidden">
             <table className="w-full text-left text-xs">
               <thead className="bg-slate-100 text-[11px] font-bold uppercase text-slate-600">
                 <tr>
-                  <th className="py-2.5 px-3">Officer</th>
-                  <th className="py-2.5 px-3">Service ID</th>
-                  <th className="py-2.5 px-3 text-right">Allocated</th>
-                  <th className="py-2.5 px-3 text-right">Spent</th>
-                  <th className="py-2.5 px-3 text-right">Pending</th>
-                  <th className="py-2.5 px-3 text-right">Available</th>
-                  <th className="py-2.5 px-3 text-center">Utilization</th>
+                  <th className="py-2.5 px-3">কর্মকর্তা</th>
+                  <th className="py-2.5 px-3">সার্ভিস আইডি</th>
+                  <th className="py-2.5 px-3 text-right">বরাদ্দকৃত</th>
+                  <th className="py-2.5 px-3 text-right">ব্যয়কৃত</th>
+                  <th className="py-2.5 px-3 text-right">প্রক্রিয়াধীন</th>
+                  <th className="py-2.5 px-3 text-right">অবশিষ্ট</th>
+                  <th className="py-2.5 px-3 text-center">ব্যয়ের হার</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -377,14 +378,14 @@ export default async function AdminReportsPage({
         {/* Formal Signature Footer */}
         <div className="pt-8 border-t border-slate-200 grid grid-cols-2 gap-8 text-xs text-slate-500">
           <div>
-            <p className="font-semibold text-slate-800">Director of Naval Administration</p>
+            <p className="font-semibold text-slate-800">পরিচালক, নৌ প্রশাসন পরিদপ্তর</p>
             <div className="h-12 border-b border-dashed border-slate-300 mt-2" />
             <p className="mt-1 font-mono text-[11px]">Commodore K. M. Tariqul Islam, ndc, psc</p>
           </div>
           <div>
-            <p className="font-semibold text-slate-800">Principal Staff Officer Certification</p>
+            <p className="font-semibold text-slate-800">প্রিন্সিপাল স্টাফ অফিসার প্রত্যায়ন</p>
             <div className="h-12 border-b border-dashed border-slate-300 mt-2" />
-            <p className="mt-1 font-mono text-[11px]">Naval Headquarters, Dhaka</p>
+            <p className="mt-1 font-mono text-[11px]">নৌ সদর দপ্তর, ঢাকা</p>
           </div>
         </div>
       </div>
