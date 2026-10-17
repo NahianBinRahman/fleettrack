@@ -32,6 +32,117 @@ interface AuditLogViewerProps {
   logs: AuditLogRecord[];
 }
 
+const FIELD_LABELS: Record<string, string> = {
+  name: "নাম",
+  rank: "পদবি",
+  pno: "পিএনও (PNO)",
+  email: "ইমেইল",
+  phone: "ফোন নম্বর",
+  role: "ভূমিকা / রোল",
+  status: "স্ট্যাটাস / অবস্থা",
+  amount: "পরিমাণ (টাকা)",
+  allocatedAmount: "বরাদ্দকৃত বাজেট",
+  quarter: "ত্রৈমাসিক",
+  fiscalYear: "অর্থবছর",
+  category: "ব্যয়ের খাত",
+  title: "শিরোনাম",
+  description: "বিবরণ",
+  remarks: "মন্তব্য",
+  reason: "কারণ",
+  unitName: "ইউনিট / দপ্তর",
+  unit: "ইউনিট",
+  isActive: "সক্রিয়তা",
+};
+
+interface FormattedLogProps {
+  valStr?: string | null;
+  isNew?: boolean;
+}
+
+function FormattedLogData({ valStr, isNew }: FormattedLogProps) {
+  const [showRaw, setShowRaw] = useState(false);
+
+  if (!valStr) return null;
+
+  let parsed: unknown = null;
+  try {
+    parsed = JSON.parse(valStr);
+  } catch {
+    return <span className="font-mono text-xs text-slate-700 bg-slate-50 px-2 py-1 rounded">{valStr}</span>;
+  }
+
+  // If not an object (e.g. primitive number/string)
+  if (typeof parsed !== "object" || parsed === null) {
+    return (
+      <span className="inline-block px-2.5 py-1 text-xs font-semibold rounded-lg bg-slate-100 text-slate-800">
+        {String(parsed)}
+      </span>
+    );
+  }
+
+  const entries = Object.entries(parsed as Record<string, unknown>);
+
+  return (
+    <div className="space-y-1.5">
+      <div
+        className={`rounded-xl border p-2.5 transition-all text-xs ${
+          isNew
+            ? "bg-blue-50/50 border-blue-200/70 shadow-xs"
+            : "bg-slate-50/70 border-slate-200/70"
+        }`}
+      >
+        <div className="divide-y divide-slate-100/80">
+          {entries.map(([key, value]) => {
+            const label = FIELD_LABELS[key] || key;
+            const displayValue =
+              typeof value === "object" && value !== null
+                ? JSON.stringify(value)
+                : typeof value === "boolean"
+                ? value ? "হ্যাঁ (Active)" : "না (Inactive)"
+                : String(value ?? "—");
+
+            return (
+              <div
+                key={key}
+                className="flex items-center justify-between gap-3 py-1.5 first:pt-0.5 last:pb-0.5"
+              >
+                <span className="text-slate-500 font-medium shrink-0 flex items-center gap-1.5">
+                  <span className={`w-1.5 h-1.5 rounded-full ${isNew ? "bg-blue-500" : "bg-slate-400"}`} />
+                  {label}
+                </span>
+                <span
+                  className={`font-semibold text-right break-all ${
+                    isNew ? "text-blue-950" : "text-slate-800"
+                  }`}
+                >
+                  {displayValue}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Optional raw JSON toggle */}
+      <div className="flex justify-end">
+        <button
+          type="button"
+          onClick={() => setShowRaw(!showRaw)}
+          className="text-[10px] text-slate-400 hover:text-slate-600 transition-colors underline cursor-pointer"
+        >
+          {showRaw ? "সংক্ষেপ দেখুন" : "র' কোড (JSON) দেখুন"}
+        </button>
+      </div>
+
+      {showRaw && (
+        <pre className="text-[10px] font-mono text-slate-600 bg-slate-100 p-2 rounded-lg max-h-32 overflow-y-auto whitespace-pre-wrap border border-slate-200">
+          {JSON.stringify(parsed, null, 2)}
+        </pre>
+      )}
+    </div>
+  );
+}
+
 export function AuditLogViewer({ logs }: AuditLogViewerProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [actionFilter, setActionFilter] = useState("ALL");
@@ -51,20 +162,6 @@ export function AuditLogViewer({ logs }: AuditLogViewerProps) {
       return matchesSearch && matchesAction;
     });
   }, [logs, searchQuery, actionFilter]);
-
-  const formatJSONValue = (valStr?: string | null) => {
-    if (!valStr) return null;
-    try {
-      const parsed = JSON.parse(valStr);
-      return (
-        <pre className="text-[11px] font-mono text-slate-700 bg-slate-100 p-2 rounded max-h-32 overflow-y-auto whitespace-pre-wrap">
-          {JSON.stringify(parsed, null, 2)}
-        </pre>
-      );
-    } catch {
-      return <span className="font-mono text-xs">{valStr}</span>;
-    }
-  };
 
   const getActionBadge = (action: string) => {
     switch (action) {
@@ -180,7 +277,7 @@ export function AuditLogViewer({ logs }: AuditLogViewerProps) {
                       <span className="text-[10px] font-bold uppercase text-slate-400">
                         পূর্ববর্তী মান / অবস্থা (Previous)
                       </span>
-                      {formatJSONValue(log.previousValue)}
+                      <FormattedLogData valStr={log.previousValue} isNew={false} />
                     </div>
                   )}
                   {log.newValue && (
@@ -188,7 +285,7 @@ export function AuditLogViewer({ logs }: AuditLogViewerProps) {
                       <span className="text-[10px] font-bold uppercase text-blue-800">
                         নতুন মান / অবস্থা (New)
                       </span>
-                      {formatJSONValue(log.newValue)}
+                      <FormattedLogData valStr={log.newValue} isNew={true} />
                     </div>
                   )}
                 </div>
